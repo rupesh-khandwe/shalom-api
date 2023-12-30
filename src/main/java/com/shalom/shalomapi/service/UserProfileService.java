@@ -1,5 +1,6 @@
 package com.shalom.shalomapi.service;
 
+import com.shalom.shalomapi.model.CustomUser;
 import com.shalom.shalomapi.model.UserProfile;
 import com.shalom.shalomapi.repository.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,23 @@ public class UserProfileService implements UserDetailsService {
         if(userProfile == null){
             throw new UsernameNotFoundException("User not found with username: " + username);
         } else {
-            return new org.springframework.security.core.userdetails.User(userProfile.getUserName(), userProfile.getPassword(),
-                    new ArrayList<>());
+//            return new org.springframework.security.core.userdetails.User(userProfile.getUserName(), userProfile.getPassword(),
+//                    new ArrayList<>());
+            boolean enabled = true;
+            boolean accountNonExpired = true;
+            boolean credentialsNonExpired = true;
+            boolean accountNonLocked = true;
+            return new CustomUser(userProfile.getUserName(),
+                    userProfile.getPassword(),
+                    enabled,
+                    accountNonExpired,
+                    credentialsNonExpired,
+                    accountNonLocked,
+                    new ArrayList<>(),
+                    userProfile.getUserId(),
+                    userProfile.getFirstName(),
+                    userProfile.getLastName()
+                    );
         }
     }
 

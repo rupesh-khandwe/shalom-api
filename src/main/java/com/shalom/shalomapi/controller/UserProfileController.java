@@ -2,14 +2,13 @@ package com.shalom.shalomapi.controller;
 
 import com.shalom.shalomapi.Config.JwtGeneratorImpl;
 import com.shalom.shalomapi.Config.JwtUtil;
-import com.shalom.shalomapi.model.AuthenticationRequest;
-import com.shalom.shalomapi.model.JwtRequest;
-import com.shalom.shalomapi.model.JwtResponse;
-import com.shalom.shalomapi.model.UserProfile;
+import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,7 +46,7 @@ public class UserProfileController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationReq, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
+    public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationReq, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationReq.getUserName(), authenticationReq.getPassword()));
         } catch (BadCredentialsException e) {
@@ -59,9 +58,17 @@ public class UserProfileController {
 
         final UserDetails userDetails = userProfileService.loadUserByUsername(authenticationReq.getUserName());
 
+        CustomUser user=null;
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        if(null != securityContext.getAuthentication()){
+            user = (CustomUser) userDetails;
+        }
+        System.out.println(user.getUserId());
+        System.out.println(user.getUserFirstName());
+        System.out.println(user.getUserLastName());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-
-        return new ResponseEntity<>(jwt, HttpStatus.OK);
+        JwtResponse res = new JwtResponse(jwt, user.getUserId(), user.getUserFirstName(), user.getUserLastName());
+        return new ResponseEntity<>(res, HttpStatus.OK);
 
     }
 
