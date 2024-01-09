@@ -7,6 +7,11 @@ plugins {
 group = 'com.shalom'
 version = '0.0.1-SNAPSHOT'
 
+jar {
+	archiveBaseName = 'shalom-api'
+	archiveVersion =  '0.0.1'
+}
+
 java {
 	sourceCompatibility = '11'
 }
