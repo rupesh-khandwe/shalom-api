@@ -16,7 +16,12 @@ public interface ShalomLikeRepository extends JpaRepository<ShalomLike, Long> {
     @Transactional
     @Modifying
     @Query(value = "Update shalom.shalomlike\n" +
-            "SET shalom_flag=:flag\n" +
+            "SET like_flag=:flag\n" +
             "where user_id=:userId and shalom_id=:shalomId",  nativeQuery = true)
     void updateLike(Long userId, Long shalomId, Boolean flag);
+
+    @Query(value = "Select shalom_like_id \n" +
+            "From shalom.shalomlike\n" +
+            "where user_id=:userId and shalom_id=:shalomId",  nativeQuery = true)
+    Long findByUserIdAndShalomId(Long userId, Long shalomId);
 }

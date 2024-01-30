@@ -1,10 +1,12 @@
 package com.shalom.shalomapi.model;
 
+import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name="shalomlike", schema="shalom")
 public class ShalomLike {
@@ -12,15 +14,10 @@ public class ShalomLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shalom_like_id")
-    @Getter
     private Long shalomLikeId;
-    @Getter
     private Long userId;
-    @Getter
     private Long shalomId;
-    @Getter
-    private Boolean shalomFlag;
-    @Getter
+    private Boolean likeFlag;
     private LocalDateTime createdOn;
 
     public ShalomLike(){
@@ -33,7 +30,7 @@ public class ShalomLike {
                 "shalomLikeId=" + shalomLikeId +
                 ", userId=" + userId +
                 ", shalomId=" + shalomId +
-                ", shalomFlag=" + shalomFlag +
+                ", likeFlag=" + likeFlag +
                 ", createdOn=" + createdOn +
                 '}';
     }

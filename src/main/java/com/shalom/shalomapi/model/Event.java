@@ -1,48 +1,38 @@
 package com.shalom.shalomapi.model;
 
+import lombok.Data;
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Data
 @Entity
 @Table(name="event", schema="shalom")
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
-    @Getter
     private Long eventId;
-    @Getter
     private Long userId;
-    @Getter
     private Long categoryId;
-    @Getter
     private String title;
-    @Getter
     private String description;
-    @Getter
-    private LocalDate eventDate;
-    @Getter
-    private LocalTime eventTime;
-    @Getter
+    private String eventDate;
+    private String eventTime;
     private String phone1;
-    @Getter
     private String phone2;
-    @Getter
     private String addressline1;
-    @Getter
     private String addressline2;
-    @Getter
+    private String countryId;
+    private String stateId;
+    private String cityId;
     private String regionId;
-    @Getter
     private String createdBy;
-    @Getter
-    private String createdOn;
-    @Getter
-    private String updatedOn;
 
     public Event(){
 
@@ -56,16 +46,17 @@ public class Event {
                 ", categoryId=" + categoryId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", eventDate=" + eventDate +
-                ", eventTime=" + eventTime +
+                ", eventDate='" + eventDate + '\'' +
+                ", eventTime='" + eventTime + '\'' +
                 ", phone1='" + phone1 + '\'' +
                 ", phone2='" + phone2 + '\'' +
                 ", addressline1='" + addressline1 + '\'' +
                 ", addressline2='" + addressline2 + '\'' +
+                ", countryId='" + countryId + '\'' +
+                ", stateId='" + stateId + '\'' +
+                ", cityId='" + cityId + '\'' +
                 ", regionId='" + regionId + '\'' +
                 ", createdBy='" + createdBy + '\'' +
-                ", createdOn='" + createdOn + '\'' +
-                ", updatedOn='" + updatedOn + '\'' +
                 '}';
     }
 }

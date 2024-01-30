@@ -3,14 +3,10 @@ package com.shalom.shalomapi.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
-@Entity
-@Table(name="shalom", schema="shalom")
-public class Shalom {
+public class ShalomLikeCommentDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +19,11 @@ public class Shalom {
     private LocalDateTime updatedOn;
     private String imageUrl;
     private String videoUrl;
+    private Long likeCount;
+    private Long commentCount;
     private String userName;
 
-    public Shalom(){
+    public ShalomLikeCommentDTO(){
 
     }
 
@@ -40,6 +38,8 @@ public class Shalom {
                 ", updatedOn=" + updatedOn +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", videoUrl='" + videoUrl + '\'' +
+                ", likeCount=" + likeCount +
+                ", commentCount=" + commentCount +
                 ", userName='" + userName + '\'' +
                 '}';
     }

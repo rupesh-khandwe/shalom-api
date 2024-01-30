@@ -3,10 +3,9 @@ package com.shalom.shalomapi.controller;
 import com.shalom.shalomapi.model.Church;
 import com.shalom.shalomapi.service.ChurchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,4 +32,15 @@ public class ChurchController {
         System.out.println(key);
         return churchService.findChurchBySearchKey(key);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> postChurch(@RequestBody Church church) throws Exception {
+        try{
+            churchService.registerChurch(church);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
 }

@@ -11,6 +11,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Event findByEventId(Long id);
 
+    @Query(value = "select * from shalom.event ev " +
+            "ORDER BY ev.created_on DESC",  nativeQuery = true)
     List<Event> findByUserId(Long userId);
 
 

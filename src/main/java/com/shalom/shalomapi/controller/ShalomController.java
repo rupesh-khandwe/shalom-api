@@ -1,13 +1,13 @@
 package com.shalom.shalomapi.controller;
 
-import com.shalom.shalomapi.model.Bible;
-import com.shalom.shalomapi.model.Shalom;
-import com.shalom.shalomapi.model.ShalomLike;
+import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.ShalomService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/shalom/v1")
@@ -15,6 +15,9 @@ public class ShalomController {
 
     @Autowired
     private ShalomService shalomService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("/shalomById")
     public Shalom getShalomById(@RequestParam(name = "id", defaultValue = "1") String id){
@@ -32,17 +35,27 @@ public class ShalomController {
 //    }
 
     @GetMapping("/shalomsWithLikeComment")
-    public List<Shalom> getAllLikeComment(){
+    public List<IShalomLikeComment> getAllLikeComment(){
         return shalomService.findAllLikeComment();
+//        List<Shalom> shaloms = shalomService.findAllLikeComment();
+//        return shaloms.stream()
+//                .map(this::convertToDto)
+//                .collect(Collectors.toList());
     }
 
-    @PostMapping("/saveShalom")
-    public Shalom createLikeOnComment(Shalom shalom){
+    @PostMapping("/save")
+    public Shalom saveShalom(@RequestBody ShalomDTO shalom){
         return shalomService.saveShalom(shalom);
     }
 
-    @PutMapping("/updateLike")
-    public void updateLike(@RequestParam(name = "userId") String userId, @RequestParam(name = "shalomId") String shalomId, @RequestParam(name = "likeFlag") String likeFlag){
+    @PutMapping("/saveLike")
+    public List<IShalomLikeComment> updateLike(@RequestParam(name = "userId") String userId, @RequestParam(name = "shalomId") String shalomId, @RequestParam(name = "likeFlag") String likeFlag){
         shalomService.updateLike(Long.parseLong(userId), Long.parseLong(shalomId), Boolean.parseBoolean(likeFlag));
+        return shalomService.findAllLikeComment();
+    }
+
+    private ShalomLikeCommentDTO convertToDto(Shalom shalom) {
+        ShalomLikeCommentDTO shalomDto = modelMapper.map(shalom, ShalomLikeCommentDTO.class);
+        return shalomDto;
     }
 }

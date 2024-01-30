@@ -1,12 +1,11 @@
 package com.shalom.shalomapi.controller;
 
-import com.shalom.shalomapi.model.Event;
+import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +26,19 @@ public class EventController {
         return eventService.findByUserId(Long.parseLong(id));
     }
 
-//    @GetMapping("/church/v1/searchByKey")
-//    public List<Church> getChurchBySearchKey(@RequestParam(name = "key", defaultValue = "Bengaluru") String key){
-//        return eventService.findChurchBySearchKey(key);
-//    }
+    @GetMapping("/category")
+    public List<Category> getCategory() {
+        return eventService.findAllCategory();
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> saveEvent(@RequestBody Event event) throws Exception {
+        try{
+            eventService.save(event);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
 }
