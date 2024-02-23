@@ -1,8 +1,12 @@
 package com.shalom.shalomapi.service;
 
 import com.shalom.shalomapi.model.CustomUser;
+import com.shalom.shalomapi.model.IEditUserProfile;
+import com.shalom.shalomapi.model.IUser;
 import com.shalom.shalomapi.model.UserProfile;
 import com.shalom.shalomapi.repository.UserProfileRepository;
+import org.apache.commons.text.WordUtils;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,9 +38,9 @@ public class UserProfileService implements UserDetailsService {
         userProf.setUserName(userProfile.getUserName());
         userProf.setPassword(new BCryptPasswordEncoder().encode(userProfile.getPassword()));
         userProf.setEmail(userProfile.getEmail());
-        userProf.setFirstName(userProfile.getFirstName());
-        userProf.setMiddleName(userProfile.getMiddleName());
-        userProf.setLastName(userProfile.getLastName());
+        userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getFirstName()));
+        userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getMiddleName()));
+        userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getLastName()));
         userProf.setGender(userProfile.getGender());
         userProf.setPhone1(userProfile.getPhone1());
         userProf.setPhone2(userProfile.getPhone2());
@@ -85,6 +89,24 @@ public class UserProfileService implements UserDetailsService {
                     userProfile.getLastName()
                     );
         }
+    }
+
+    public IEditUserProfile findUserProfile(Long userId){
+        return userProfileRepo.findUserProfileByUserId(userId);
+    }
+
+    public void saveOrUpdateUserProfile(UserProfile userProfile) {
+        try {
+            userProfileRepo.saveOrUpdate(userProfile.getUserId(), userProfile.getEmail(), userProfile.getFirstName(), userProfile.getMiddleName(), userProfile.getLastName(),
+                    userProfile.getPhone1(), userProfile.getPhone2(), userProfile.getAddressLine1(), userProfile.getAddressLine2(), userProfile.getStateId(),
+                    userProfile.getCityId(), userProfile.getRegionId());
+        } catch(ConstraintViolationException ex){
+            System.out.println(ex.getStackTrace());
+        }
+    }
+
+    public List<IUser> getUsers(Long userId){
+        return userProfileRepo.getUsers(userId);
     }
 
 }

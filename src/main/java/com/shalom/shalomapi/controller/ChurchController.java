@@ -23,13 +23,12 @@ public class ChurchController {
     }
 
     @GetMapping("/churchList")
-    public List<Church> getBible(){
+    public List<Church> getChurch(){
         return churchService.findAll();
     }
 
     @GetMapping("/searchByKey")
     public List<Church> getChurchBySearchKey(@RequestParam(name = "key", defaultValue = "Bengaluru") String key){
-        System.out.println(key);
         return churchService.findChurchBySearchKey(key);
     }
 

@@ -23,10 +23,10 @@ public class UserProfile {
     private String phone2;
     private String addressLine1;
     private String addressLine2;
-    private String countryId;
-    private String stateId;
-    private String cityId;
-    private String regionId;
+    private Long countryId;
+    private Long stateId;
+    private Long cityId;
+    private Long regionId;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
     private LocalDateTime lastLogin;

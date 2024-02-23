@@ -14,6 +14,8 @@ public interface ChurchRepository extends JpaRepository<Church, Long> {
 
     @Query(value = "select * from shalom.church ch where lower(ch.church_name) LIKE %:searchKey%" +
             "or lower(ch.addressline1) LIKE %:searchKey%" +
-            "or lower(ch.addressline2) LIKE %:searchKey%",  nativeQuery = true)
+            "or lower(ch.addressline2) LIKE %:searchKey%" +
+            "or ch.city_id LIKE '228'" +
+            " ORDER BY ch.created_on DESC", nativeQuery = true)
     List<Church> findByChurchNameContainingOrAddressline1ContainingOrAddressline2ContainingCaseInsensitive(String searchKey);
 }

@@ -1,12 +1,11 @@
 package com.shalom.shalomapi.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.shalom.shalomapi.model.IShalomLikeComment;
-import  com.shalom.shalomapi.model.Shalom;
-import com.shalom.shalomapi.model.ShalomDTO;
-import com.shalom.shalomapi.model.ShalomLike;
+import com.shalom.shalomapi.model.*;
+import com.shalom.shalomapi.repository.ShalomCommentRepository;
 import com.shalom.shalomapi.repository.ShalomLikeRepository;
 import com.shalom.shalomapi.repository.ShalomRepository;
+import com.shalom.shalomapi.repository.UserFollowRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,6 +31,12 @@ public class ShalomService {
     @Autowired
     private ShalomLikeRepository shalomLikeRepo;
 
+    @Autowired
+    private ShalomCommentRepository shalomCommentRepo;
+
+    @Autowired
+    private UserFollowRepository userFollowRepo;
+
     public Shalom findById(Long id){
         Shalom shalomValue = shalomRepo.findByShalomId(id);
 //        Church churchValue = constants.orElseThrow(() ->
@@ -43,8 +48,16 @@ public class ShalomService {
         return shalomRepo.findByUserId(userId);
     }
 
-    public List<IShalomLikeComment> findAllLikeComment(){
-        return shalomRepo.findAllLikeComment();
+    public List<ShalomComment> findCommentByShalomId(Long shalomId){
+        return shalomCommentRepo.findByShalomId(shalomId);
+    }
+
+    public ShalomComment saveShalomComment(ShalomComment shalomComment){
+        return shalomCommentRepo.save(shalomComment);
+    }
+
+    public List<IShalomLikeComment> findAllLikeComment(Long userId){
+        return shalomRepo.findAllLikeComment(userId);
     }
 
     public Shalom saveShalom(ShalomDTO shalomDto){
@@ -129,5 +142,21 @@ public class ShalomService {
 
         System.out.println(generatedString);
         return userId+"/"+generatedString+"."+fileExt.trim();
+    }
+
+    public List<IUserFollow> findFollowers(Long userId, Boolean flag){
+        return userFollowRepo.findByUserId(userId, flag);
+    }
+
+    public List<IUserFollow> findFollowings(Long followId, Boolean flag){
+        return userFollowRepo.findByFollowId(followId, flag);
+    }
+
+    public void updateFollowFlag(Long userId, Long followId, Boolean flag){
+         userFollowRepo.updateFollowFlag(userId, followId, flag);
+    }
+
+    public IUserProfile findProfileCountsByUserId(Long userId){
+        return userFollowRepo.findCountByUserId(userId);
     }
 }

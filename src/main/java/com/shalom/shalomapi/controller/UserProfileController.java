@@ -4,6 +4,7 @@ import com.shalom.shalomapi.Config.JwtGeneratorImpl;
 import com.shalom.shalomapi.Config.JwtUtil;
 import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.UserProfileService;
+import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,21 +21,18 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/userProfile/v1/")
 @CrossOrigin
 public class UserProfileController {
-
     @Autowired
     private UserProfileService userProfileService;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtUtil jwtUtil;
-
     @PostMapping("/register")
     public ResponseEntity<?> postUser(@RequestBody UserProfile userProfile) throws Exception {
         try{
@@ -44,7 +42,6 @@ public class UserProfileController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
-
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationReq, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
         try {
@@ -63,44 +60,9 @@ public class UserProfileController {
         if(null != securityContext.getAuthentication()){
             user = (CustomUser) userDetails;
         }
-        System.out.println(user.getUserId());
-        System.out.println(user.getUserFirstName());
-        System.out.println(user.getUserLastName());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        JwtResponse res = new JwtResponse(jwt, user.getUserId(), user.getUserFirstName(), user.getUserLastName());
+        JwtResponse res = new JwtResponse(jwt, user.getUserId(), WordUtils.capitalizeFully(user.getUserFirstName()), WordUtils.capitalizeFully(user.getUserLastName()));
         return new ResponseEntity<>(res, HttpStatus.OK);
-
     }
 
- /*   @PostMapping("/authenticate")
-    public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        try {
-            if(authenticationRequest.getUserName() == null || authenticationRequest.getPassword() == null) {
-                throw new UsernameNotFoundException("UserName or Password is Empty");
-            }
-
-            authenticate(authenticationRequest.getUserName(), authenticationRequest.getPassword());
-
-            final UserDetails userDetails = userProfileService
-                    .loadUserByUsername(authenticationRequest.getUserName());
-
-  *//*          UserProfile userData= userProfileService.getUserByNameAndPassword(userProfile.getUserName(), userProfile.getPassword());
-            if(userData == null){
-                throw new UsernameNotFoundException("UserName or Password is Invalid");
-            }*//*
-            return new ResponseEntity<>(new JwtResponse(jwtGenerator.generateToken(userDetails)), HttpStatus.OK);
-        } catch (UsernameNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
-    }
-
-    private void authenticate(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
-    }*/
 }
