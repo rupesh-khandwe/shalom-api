@@ -46,7 +46,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
 
     @Query(value="SELECT up.user_id as userId, (coalesce(up.first_name, '')|| ' ' || coalesce(up.last_name, '')) as userName \n" +
             "FROM shalom.userprofile up\n" +
-            "WHERE up.user_id NOT IN (SELECT uf.follow_id FROM shalom.userfollow uf WHERE uf.user_id=:userId)\n" +
+            "WHERE up.user_id NOT IN (SELECT uf.follow_id FROM shalom.userfollow uf WHERE uf.user_id=:userId AND uf.follow_flag=:followFlag)\n" +
             "AND up.user_id!=:userId", nativeQuery = true)
-    public List<IUser> getUsers(Long userId);
+    public List<IUser> getUsers(Long userId, Boolean followFlag);
 }

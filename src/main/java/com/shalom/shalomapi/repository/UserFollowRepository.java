@@ -20,6 +20,8 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
             "where user_id=:userId and follow_id=:followId",  nativeQuery = true)
     void updateFollowFlag(Long userId, Long followId, Boolean flag);
 
+    public UserFollow findByUserIdAndFollowId(Long userId, Long followId);
+
     @Query(value = "Select uf.follow_seq_id as followSeqId, uf.user_id as userId, uf.follow_id as followId, uf.follow_flag as followFlag, up.first_name as firstName, up.last_name as lastName\n" +
             "From shalom.userfollow uf\n" +
             "JOIN shalom.userprofile up ON up.user_id = uf.follow_id\n" +
@@ -39,10 +41,10 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
     @Query(value = "Select (\n" +
             "Select count(uf.follow_id) from shalom.userfollow uf\n" +
             "where uf.user_id=:userId and uf.follow_flag=true\n" +
-            ") AS followersCount,\n" +
+            ") AS followingsCount,\n" +
             "(select count(uf.user_id) from shalom.userfollow uf\n"+
             "where uf.follow_id=:userId and uf.follow_flag=true\n" +
-            ") AS followingsCount,\n" +
+            ") AS followersCount,\n" +
             "(SELECT count(*) FROM shalom.shalom sh\n" +
             "where sh.user_id=:userId\n" +
             ") AS shalomCount,\n" +

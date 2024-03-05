@@ -1,27 +1,26 @@
-package com.shalom.shalomapi.Config;
+package com.shalom.shalomapi.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.io.Decoders;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import io.jsonwebtoken.security.Keys;
 
 @Component
-public class JwtUtil {
+public class JwtService {
+    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
     @Value("${jwt.refreshtoken.expiry}")
     private Long refreshtokenExpiry;
-
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -59,7 +58,7 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String userName) {
-        System.out.println("Token will expire in = "+new Date(System.currentTimeMillis()+refreshtokenExpiry));
+        System.out.println("Token will expire in = "+refreshtokenExpiry);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)

@@ -15,7 +15,7 @@ public class UserFollow {
     private Long followSeqId;
     private Long userId;
     private Long followId;
-    //private Boolean followFlag;
+    private Boolean followFlag;
 
     public UserFollow(){
 
@@ -27,6 +27,7 @@ public class UserFollow {
                 "followSeqId=" + followSeqId +
                 ", userId=" + userId +
                 ", followId=" + followId +
+                ", followFlag=" + followFlag +
                 '}';
     }
 }

@@ -105,8 +105,8 @@ public class UserProfileService implements UserDetailsService {
         }
     }
 
-    public List<IUser> getUsers(Long userId){
-        return userProfileRepo.getUsers(userId);
+    public List<IUser> getUsers(Long userId, Boolean followFlag){
+        return userProfileRepo.getUsers(userId, followFlag);
     }
 
 }

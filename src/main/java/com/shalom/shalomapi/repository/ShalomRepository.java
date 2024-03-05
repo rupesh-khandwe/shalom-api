@@ -37,6 +37,7 @@ public interface ShalomRepository extends JpaRepository<Shalom, Long> {
                     "AND lkflg.user_id=:userId "+
                     "LEFT OUTER JOIN shalom.shalomcomment AS cmt "+
                     "ON shl.shalom_id = cmt.shalom_id "+
+                    "WHERE shl.user_id IN (SELECT uf.follow_id FROM shalom.userfollow uf WHERE uf.user_id=:userId AND uf.follow_flag=true) OR shl.user_id=:userId "+
                     "GROUP BY shl.shalom_id, lk.like_flag, lkflg.like_flag "+
                     "ORDER BY shl.created_on DESC",  nativeQuery = true)
     List<IShalomLikeComment> findAllLikeComment(Long userId);

@@ -73,19 +73,43 @@ public class ShalomController {
     }
 
     @GetMapping("/followers")
-    public List<IUserFollow> getFollowers(@RequestParam(name = "userId") String userId, @RequestParam(name = "followFlag", defaultValue = "true") String followFlag) {
-        return shalomService.findFollowers(Long.parseLong(userId), Boolean.parseBoolean(followFlag));
+    public List<IUserFollow> getFollowers(@RequestParam(name = "followId") String followId, @RequestParam(name = "followFlag", defaultValue = "true") String followFlag) {
+        return shalomService.findFollowers(Long.parseLong(followId), Boolean.parseBoolean(followFlag));
     }
 
     @GetMapping("/following")
-    public List<IUserFollow> getFollowings(@RequestParam(name = "followId") String followId, @RequestParam(name = "followFlag", defaultValue = "true")String followFlag) {
-        return shalomService.findFollowings(Long.parseLong(followId), Boolean.parseBoolean(followFlag));
+    public List<IUserFollow> getFollowings(@RequestParam(name = "userId") String userId, @RequestParam(name = "followFlag", defaultValue = "true")String followFlag) {
+        return shalomService.findFollowings(Long.parseLong(userId), Boolean.parseBoolean(followFlag));
     }
 
     @PutMapping("/saveFollow")
-    public List<IUserFollow> updateFollow(@RequestParam(name = "userId") String userId, @RequestParam(name = "followId") String followId, @RequestParam(name = "followFlag", defaultValue = "true") String followFlag){
-        shalomService.updateFollowFlag(Long.parseLong(userId), Long.parseLong(followId), Boolean.parseBoolean(followFlag));
-        return shalomService.findFollowers(Long.parseLong(userId), Boolean.parseBoolean(followFlag));
+    public ResponseEntity<List<IUser>> updateFollow(@RequestBody UserFollow userFollow){
+        try{
+            shalomService.saveOrUpdateFollower(userFollow);
+            return new ResponseEntity<>(userProfileService.getUsers(userFollow.getUserId(), true), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PutMapping("/updateFollowing")
+    public ResponseEntity<List<IUserFollow>> updateFollowing(@RequestBody UserFollow userFollow){
+        try{
+            shalomService.saveOrUpdateFollower(userFollow);
+            return new ResponseEntity<>(shalomService.findFollowings(userFollow.getUserId(), true), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @PutMapping("/updateFollower")
+    public ResponseEntity<List<IUserFollow>> updateFollower(@RequestBody UserFollow userFollow){
+        try{
+            shalomService.saveOrUpdateFollower(userFollow);
+            return new ResponseEntity<>(shalomService.findFollowers(userFollow.getFollowId(), true), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @GetMapping("/profile")
@@ -111,7 +135,7 @@ public class ShalomController {
     @GetMapping("/users")
     public ResponseEntity<List<IUser>> getUsers(@RequestParam(name = "userId") String userId){
         try {
-            return new ResponseEntity<>(userProfileService.getUsers(Long.parseLong(userId)), HttpStatus.OK);
+            return new ResponseEntity<>(userProfileService.getUsers(Long.parseLong(userId), true), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

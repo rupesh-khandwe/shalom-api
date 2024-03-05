@@ -16,9 +16,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;*/
 
+
+import com.shalom.shalomapi.service.JwtService;
 import com.shalom.shalomapi.service.UserProfileService;
 import io.jsonwebtoken.ExpiredJwtException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,7 +43,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private JwtGeneratorImpl jwtTokenGenerator;*/
 
 	@Autowired
-	private JwtUtil jwtUtil;
+	private JwtService jwtService;
+
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -52,13 +54,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
-			username = jwtUtil.extractUsername(token);
+			username = jwtService.extractUsername(token);
 		}
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userProfileService.loadUserByUsername(username);
-
-			if (jwtUtil.validateToken(token, userDetails)) {
+			//UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+			if (jwtService.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);

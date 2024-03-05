@@ -144,16 +144,21 @@ public class ShalomService {
         return userId+"/"+generatedString+"."+fileExt.trim();
     }
 
-    public List<IUserFollow> findFollowers(Long userId, Boolean flag){
-        return userFollowRepo.findByUserId(userId, flag);
-    }
-
-    public List<IUserFollow> findFollowings(Long followId, Boolean flag){
+    public List<IUserFollow> findFollowers(Long followId, Boolean flag){
         return userFollowRepo.findByFollowId(followId, flag);
     }
 
-    public void updateFollowFlag(Long userId, Long followId, Boolean flag){
-         userFollowRepo.updateFollowFlag(userId, followId, flag);
+    public List<IUserFollow> findFollowings(Long userId, Boolean flag){
+        return userFollowRepo.findByUserId(userId, flag);
+    }
+
+    public void saveOrUpdateFollower(UserFollow userFollow){
+        if(userFollowRepo.findByUserIdAndFollowId(userFollow.getUserId(), userFollow.getFollowId())!=null){
+            userFollowRepo.updateFollowFlag(userFollow.getUserId(), userFollow.getFollowId(), userFollow.getFollowFlag());
+        } else{
+            userFollowRepo.save(userFollow);
+        }
+
     }
 
     public IUserProfile findProfileCountsByUserId(Long userId){
