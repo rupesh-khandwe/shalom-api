@@ -3,6 +3,7 @@ package com.shalom.shalomapi.model;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,11 +29,15 @@ public class Event {
     private String phone2;
     private String addressline1;
     private String addressline2;
-    private String countryId;
-    private String stateId;
-    private String cityId;
-    private String regionId;
+    private Long countryId;
+    private Long stateId;
+    private Long cityId;
+    private Long regionId;
     private String createdBy;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime createdOn;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime updatedOn;
 
     public Event(){
 
@@ -52,11 +57,13 @@ public class Event {
                 ", phone2='" + phone2 + '\'' +
                 ", addressline1='" + addressline1 + '\'' +
                 ", addressline2='" + addressline2 + '\'' +
-                ", countryId='" + countryId + '\'' +
-                ", stateId='" + stateId + '\'' +
-                ", cityId='" + cityId + '\'' +
-                ", regionId='" + regionId + '\'' +
+                ", countryId=" + countryId +
+                ", stateId=" + stateId +
+                ", cityId=" + cityId +
+                ", regionId=" + regionId +
                 ", createdBy='" + createdBy + '\'' +
+                ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
                 '}';
     }
 }

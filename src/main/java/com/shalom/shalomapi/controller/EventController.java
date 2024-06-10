@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/event/v1")
+@RequestMapping("/api/v1/event")
 public class EventController {
 
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/eventById")
+    @GetMapping("/id")
     public Event getEventById(@RequestParam(name = "id", defaultValue = "1") String id){
         return eventService.findById(Long.parseLong(id));
     }
 
-    @GetMapping("/eventByUserId")
-    public List<Event> getEventByUserId(@RequestParam(name = "id", defaultValue = "1") String id) {
+    @GetMapping("/user")
+    public List<IEvent> getEventByUserId(@RequestParam(name = "id", defaultValue = "1") String id) {
         return eventService.findByUserId(Long.parseLong(id));
     }
 
@@ -39,6 +39,12 @@ public class EventController {
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
+    }
+
+    @DeleteMapping("/delete")
+    public List<IEvent> deleteEvent(@RequestParam(name = "id") String id, @RequestParam(name = "userId") String userId){
+        eventService.deleteEvent(Long.parseLong(id));
+        return eventService.findByUserId(Long.parseLong(userId));
     }
 
 }

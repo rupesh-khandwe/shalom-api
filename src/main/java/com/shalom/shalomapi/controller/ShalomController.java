@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/shalom/v1")
+@RequestMapping("/api/v1/shalom")
 public class ShalomController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class ShalomController {
         return shalomService.findById(Long.parseLong(id));
     }
 
-    @GetMapping("/shalomByUserId")
+    @GetMapping("/user")
     public List<Shalom> getShalomByUserId(@RequestParam(name = "id", defaultValue = "1") String id) {
         return shalomService.findByUserId(Long.parseLong(id));
     }
@@ -139,6 +139,12 @@ public class ShalomController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @DeleteMapping("/delete")
+    public List<Shalom> deleteShalom(@RequestParam(name = "id") String id, @RequestParam(name = "userId") String userId){
+        shalomService.deleteShalom(Long.parseLong(id));
+        return shalomService.findByUserId(Long.parseLong(userId));
     }
 
     private ShalomLikeCommentDTO convertToDto(Shalom shalom) {

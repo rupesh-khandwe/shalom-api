@@ -47,4 +47,9 @@ public class AddressService {
         List<Region> regionList = regionRepo.findAllByCityId(cityId);
         return regionList;
     }
+
+    public List<Region> findRegionByCityIdAndRegionNameOrPincode(Long cityId, String key){
+        List<Region> regionList = regionRepo.findAllByCityIdAndRegionNameOrPincode(cityId, key);
+        return regionList;
+    }
 }

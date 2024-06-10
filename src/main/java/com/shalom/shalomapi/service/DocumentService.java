@@ -21,11 +21,12 @@ public class DocumentService {
     private final AmazonS3 amazonS3;
     private final AWSClientConfig awsClientConfig;
 
-    public String upload(InputStream stream, ObjectMetadata meta, String fileName) {
+    public String upload(InputStream stream, ObjectMetadata meta, String fileName, int size, int loop) {
         //File localFile = convertMultipartFileToFile(file);
 
         amazonS3.putObject(new PutObjectRequest(awsClientConfig.getBucketName(), fileName, stream, meta));
-        return "https://"+awsClientConfig.getBucketName()+".s3.amazonaws.com/"+fileName+"|";
+        String imageUrl="https://"+awsClientConfig.getBucketName()+".s3.amazonaws.com/"+fileName;
+        return loop<size?imageUrl+"|":imageUrl;
     }
 
     private File convertMultipartFileToFile(MultipartFile file) {

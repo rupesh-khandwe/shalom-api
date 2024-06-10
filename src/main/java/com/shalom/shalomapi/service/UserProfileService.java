@@ -39,14 +39,15 @@ public class UserProfileService implements UserDetailsService {
         userProf.setPassword(new BCryptPasswordEncoder().encode(userProfile.getPassword()));
         userProf.setEmail(userProfile.getEmail());
         userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getFirstName()));
-        userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getMiddleName()));
-        userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getLastName()));
+        //userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getMiddleName()));
+        userProf.setLastName(WordUtils.capitalizeFully(userProfile.getLastName()));
         userProf.setGender(userProfile.getGender());
         userProf.setPhone1(userProfile.getPhone1());
         userProf.setPhone2(userProfile.getPhone2());
         userProf.setAddressLine1(userProfile.getAddressLine1());
         userProf.setAddressLine2(userProfile.getAddressLine2());
-        userProf.setCountryId(userProfile.getCountryId());
+        //userProf.setCountryId(userProfile.getCountryId());
+        userProf.setCountryId(Long.parseLong("78"));
         userProf.setStateId(userProfile.getStateId());
         userProf.setCityId(userProfile.getCityId());
         userProf.setRegionId(userProfile.getRegionId());
@@ -92,7 +93,15 @@ public class UserProfileService implements UserDetailsService {
     }
 
     public IEditUserProfile findUserProfile(Long userId){
-        return userProfileRepo.findUserProfileByUserId(userId);
+        String isNotNull = userProfileRepo.findUserProfileByUserIdAndNullCondition(userId);
+        System.out.println("Flag value"+isNotNull);
+        if(null!=isNotNull){
+            System.out.println("true value");
+            return userProfileRepo.findUserProfileByUserId(userId);
+        } else {
+            System.out.println("false value");
+            return userProfileRepo.findUserProfileByUserIdAndStateIdIsNull(userId);
+        }
     }
 
     public void saveOrUpdateUserProfile(UserProfile userProfile) {

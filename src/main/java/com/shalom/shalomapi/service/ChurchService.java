@@ -1,6 +1,7 @@
 package com.shalom.shalomapi.service;
 
 import com.shalom.shalomapi.model.Church;
+import com.shalom.shalomapi.model.IChurch;
 import com.shalom.shalomapi.repository.ChurchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,8 +30,9 @@ public class ChurchService {
         return churchRepo.findAll();
     }
 
-    public List<Church> findChurchBySearchKey(String key){
-         return churchRepo.findByChurchNameContainingOrAddressline1ContainingOrAddressline2ContainingCaseInsensitive(key.toLowerCase());
+    public List<IChurch> findChurchBySearchKey(String key, Long cityId){
+
+         return churchRepo.findByChurchNameContainingOrAddressline1ContainingOrAddressline2ContainingCaseInsensitive(key.toLowerCase(), cityId);
     }
 
     public void registerChurch(Church church) {
@@ -52,4 +54,7 @@ public class ChurchService {
         churchRepo.save(church);
     }
 
+    public void deleteChurch(Long id){
+        churchRepo.deleteById(id);
+    }
 }

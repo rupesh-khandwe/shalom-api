@@ -19,7 +19,8 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
 
     @Query(value = "SELECT up.email as userEmail, up.first_name as userFirstName, up.middle_name as userMiddleName, up.last_name as userLastName, up.phone1 as userPhone1, up.phone2 as userPhone2,\n" +
             "up.address_line1 as userAddressLine1, up.address_line2 as userAddressLine2, up.user_name as userName,\n" +
-            "rg.region_id as regionId, rg.region_name as userRegionName,ct.city_id as cityId, ct.city_name as userCityName, st.state_id as stateId, st.state_name as userStateName, cnt.country_id as countryId, cnt.country_name as userCountryName\n" +
+            "rg.region_id as regionId, rg.region_name as userRegionName,ct.city_id as cityId, ct.city_name as userCityName, st.state_id as stateId, st.state_name as userStateName, " +
+            "cnt.country_id as countryId, cnt.country_name as userCountryName\n" +
             "FROM shalom.userprofile up\n" +
             "JOIN shalom.region rg ON up.region_id=rg.region_id\n"+
             "JOIN shalom.city ct ON ct.city_id=up.city_id\n" +
@@ -27,6 +28,19 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
             "JOIN shalom.country cnt ON cnt.country_id=up.country_id\n" +
             "WHERE up.user_id=:userId", nativeQuery = true)
     public IEditUserProfile findUserProfileByUserId(Long userId);
+
+    @Query(value = "SELECT up.email as userEmail, up.first_name as userFirstName, up.middle_name as userMiddleName, up.last_name as userLastName, up.phone1 as userPhone1, up.phone2 as userPhone2,\n" +
+            "up.address_line1 as userAddressLine1, up.address_line2 as userAddressLine2, up.user_name as userName,\n" +
+            "cnt.country_id as countryId, cnt.country_name as userCountryName\n" +
+            "FROM shalom.userprofile up\n" +
+            "JOIN shalom.country cnt ON cnt.country_id=up.country_id\n" +
+            "WHERE up.user_id=:userId", nativeQuery = true)
+    public IEditUserProfile findUserProfileByUserIdAndStateIdIsNull(Long userId);
+
+
+    @Query(value = "SELECT 1 FROM shalom.userprofile up1\n" +
+            "WHERE up1.user_id=:userId AND up1.region_id IS NOT NULL and up1.city_id IS NOT NULL and up1.state_id IS NOT NULL", nativeQuery = true)
+    public String findUserProfileByUserIdAndNullCondition(Long userId);
 
     @Transactional
     @Modifying

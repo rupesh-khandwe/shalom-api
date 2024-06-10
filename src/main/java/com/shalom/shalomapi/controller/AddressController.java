@@ -40,5 +40,9 @@ public class AddressController {
         return addressService.findRegionByCityId(Long.parseLong(cityId));
     }
 
-
+    @GetMapping("/RegionsByKey")
+    public List<Region> getRegionByCityId(@RequestParam(value = "cityId", defaultValue = "228") String cityId, String key){
+        System.out.println(key);
+        return addressService.findRegionByCityIdAndRegionNameOrPincode(Long.parseLong(cityId), key.toLowerCase());
+    }
 }

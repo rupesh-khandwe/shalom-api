@@ -2,6 +2,7 @@ package com.shalom.shalomapi.service;
 
 import com.shalom.shalomapi.model.Category;
 import com.shalom.shalomapi.model.Event;
+import com.shalom.shalomapi.model.IEvent;
 import com.shalom.shalomapi.repository.CategoryRepository;
 import com.shalom.shalomapi.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class EventService {
         return eventValue;
     }
 
-    public List<Event> findByUserId(Long userId){
+    public List<IEvent> findByUserId(Long userId){
         return eventRepo.findByUserId(userId);
     }
 
@@ -39,5 +40,9 @@ public class EventService {
 
     public Event save(Event event){
         return eventRepo.save(event);
+    }
+
+    public void deleteEvent(Long id){
+        eventRepo.deleteById(id);
     }
 }

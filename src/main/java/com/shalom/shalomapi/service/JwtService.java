@@ -49,7 +49,8 @@ public class JwtService {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        //return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()));
     }
 
     public String generateToken(String userName){
@@ -63,7 +64,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+refreshtokenExpiry))
+                //.setExpiration(new Date(System.currentTimeMillis()+refreshtokenExpiry))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

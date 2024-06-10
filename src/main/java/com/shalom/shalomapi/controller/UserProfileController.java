@@ -67,7 +67,7 @@ public class UserProfileController {
                         .accessToken(jwtService.generateToken(authRequestDTO.getUsername()))
                         .refreshToken(refreshToken.getToken())
                         .userId(user.getUserId())
-                        .userName(WordUtils.capitalizeFully(user.getUserFirstName()) + " " + WordUtils.capitalizeFully(user.getUserLastName()))
+                        .userName(WordUtils.capitalizeFully(user.getUserFirstName()))
                         .build(), HttpStatus.OK);
             }
         } catch (BadCredentialsException e) {
@@ -90,6 +90,7 @@ public class UserProfileController {
 
     @PostMapping("/refreshToken")
     public JwtResponseDTO refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
+        System.out.println("Here to refresh the token=="+refreshTokenRequestDTO.getToken());
         return refreshTokenService.findByToken(refreshTokenRequestDTO.getToken())
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUserInfo)

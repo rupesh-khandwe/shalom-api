@@ -71,6 +71,7 @@ public class ShalomService {
 
         Elements elements = doc.getElementsByTag("img");
         String s3FilePath = "";
+        int i=1;
         for (Element element : elements) {
             if (element.attr("src").startsWith("data:image")) {
                 System.out.println(element.attr("src"));
@@ -79,7 +80,7 @@ public class ShalomService {
                 // Note preferred way of declaring an array variable
                 String[] mimeType = baseImage[0].split(":"); //data:image/jpeg
                 String fileMimeType= mimeType.length>1?mimeType[1].substring(0, mimeType[1].length() - 1):"image/jpeg";
-                System.out.println(fileMimeType);
+                System.out.println(fileMimeType+elements.size());
                 String[] fileExt = fileMimeType.split("/");
                 String fileExtType= fileExt.length>1?fileExt[1]:"jpeg";
                 String s3FileName = generatingRandomAlphanumericString(Long.toString(shalomDto.getUserId()), fileExtType);
@@ -90,8 +91,8 @@ public class ShalomService {
                     ObjectMetadata meta = new ObjectMetadata();
                     meta.setContentLength(data.length);
                     meta.setContentType(fileMimeType);
-                    s3FilePath += docService.upload(stream, meta, s3FileName);
-
+                    s3FilePath += docService.upload(stream, meta, s3FileName,elements.size(), i);
+                    i++;
 /*                    try (OutputStream fstream = new FileOutputStream("C:\\Users\\Ghost\\OneDrive\\shalom\\"+s3FileName)) {
                         fstream.write(data);
                     } catch (FileNotFoundException ex){
@@ -163,5 +164,9 @@ public class ShalomService {
 
     public IUserProfile findProfileCountsByUserId(Long userId){
         return userFollowRepo.findCountByUserId(userId);
+    }
+
+    public void deleteShalom(Long id){
+        shalomRepo.deleteById(id);
     }
 }
