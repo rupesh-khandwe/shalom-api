@@ -14,8 +14,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query(value = "select ev.event_id as eventId, ev.user_id as userId, ev.category_id as categoryId, ev.title as title, ev.description as description, ev.event_date as eventDate, " +
             "ev.event_time as eventTime, ev.created_by as createdBy, ev.created_on as createdOn, ev.updated_on as updatedOn, ev.phone1 as phone1, ev.phone2 as phone2, ev.addressline1 as addressLine1, ev.addressline2 as addressLine2, " +
-            "rg.region_id as regionId, rg.region_name as userRegionName, ct.city_id as cityId, ct.city_name as userCityName, st.state_id as stateId, st.state_name as userStateName, cnt.country_id as countryId, cnt.country_name as userCountryName\n" +
+            "rg.region_id as regionId, rg.region_name as userRegionName, ct.city_id as cityId, ct.city_name as userCityName, st.state_id as stateId, st.state_name as userStateName, cnt.country_id as countryId, cnt.country_name as userCountryName,\n" +
+            "up.image_url AS profileImageUrl "+
             "from shalom.event ev " +
+            "JOIN shalom.userprofile up ON up.user_id = ev.user_id " +
             "JOIN shalom.region rg ON ev.region_id=rg.region_id\n"+
             "JOIN shalom.city ct ON ct.city_id=ev.city_id\n" +
             "JOIN shalom.state st ON st.state_id=ev.state_id\n" +

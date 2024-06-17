@@ -15,6 +15,7 @@ public interface IShalomLikeComment {
     Long getLikeCount();
     Long getCommentCount();
     String getUserName();
+    String getProfileImageUrl();
 
     Boolean getLikeFlag();
 }

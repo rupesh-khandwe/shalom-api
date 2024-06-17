@@ -25,4 +25,5 @@ public interface IEvent {
     Long getCountryId();
     String getUserCountryName();
     String getCreatedBy();
+    String getProfileImageUrl();
 }

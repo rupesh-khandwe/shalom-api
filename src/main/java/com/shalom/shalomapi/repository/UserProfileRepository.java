@@ -63,4 +63,16 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
             "WHERE up.user_id NOT IN (SELECT uf.follow_id FROM shalom.userfollow uf WHERE uf.user_id=:userId AND uf.follow_flag=:followFlag)\n" +
             "AND up.user_id!=:userId", nativeQuery = true)
     public List<IUser> getUsers(Long userId, Boolean followFlag);
+
+    @Transactional
+    @Modifying
+    @Query(value = "Update shalom.userprofile\n" +
+            "SET image_url=:url\n" +
+            "where user_id=:userId",  nativeQuery = true)
+    public void updateUserProfilePic(Long userId, String url);
+
+    @Query(value= "select image_url " +
+            "from shalom.userprofile " +
+            "where user_id=:userId", nativeQuery = true)
+    public String findImageUrlByUserId(Long userId);
 }

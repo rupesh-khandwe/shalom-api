@@ -1,5 +1,6 @@
 package com.shalom.shalomapi.controller;
 
+import com.shalom.shalomapi.dto.UserProfileDTO;
 import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.ShalomService;
 import com.shalom.shalomapi.service.UserProfileService;
@@ -132,6 +133,16 @@ public class ShalomController {
         }
     }
 
+    @PutMapping("/profilepic")
+    public ResponseEntity<String> updateProfilePic(@RequestBody UserProfileDTO userProfileDTO) throws Exception {
+        try {
+            userProfileService.updateUserProfilePic(userProfileDTO.getUserId(), userProfileDTO.getProfilePic());
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<IUser>> getUsers(@RequestParam(name = "userId") String userId){
         try {
@@ -150,5 +161,10 @@ public class ShalomController {
     private ShalomLikeCommentDTO convertToDto(Shalom shalom) {
         ShalomLikeCommentDTO shalomDto = modelMapper.map(shalom, ShalomLikeCommentDTO.class);
         return shalomDto;
+    }
+
+    @GetMapping("/profilePic")
+    public String findProfilePic(@RequestParam(name="userId") String userId){
+        return userProfileService.findProfilePic(Long.parseLong(userId));
     }
 }

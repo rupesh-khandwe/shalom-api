@@ -48,6 +48,8 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
             "(SELECT count(*) FROM shalom.shalom sh\n" +
             "where sh.user_id=:userId\n" +
             ") AS shalomCount,\n" +
+            "(SELECT up.image_url FROM shalom.userprofile up\n" +
+            "WHERE up.user_id=:userId) AS imageUrl,\n" +
             "(SELECT ct.city_name FROM shalom.userprofile up\n" +
             "JOIN shalom.city ct ON ct.city_id = up.city_id\n" +
             "WHERE up.user_id=:userId) AS userCity,\n" +

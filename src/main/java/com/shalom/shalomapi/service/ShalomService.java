@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
+import com.shalom.shalomapi.service.Utils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
@@ -36,6 +37,9 @@ public class ShalomService {
 
     @Autowired
     private UserFollowRepository userFollowRepo;
+
+    @Autowired
+    private Utils utils;
 
     public Shalom findById(Long id){
         Shalom shalomValue = shalomRepo.findByShalomId(id);
@@ -83,7 +87,7 @@ public class ShalomService {
                 System.out.println(fileMimeType+elements.size());
                 String[] fileExt = fileMimeType.split("/");
                 String fileExtType= fileExt.length>1?fileExt[1]:"jpeg";
-                String s3FileName = generatingRandomAlphanumericString(Long.toString(shalomDto.getUserId()), fileExtType);
+                String s3FileName = utils.generatingRandomAlphanumericString(Long.toString(shalomDto.getUserId()), fileExtType);
 
                 if(baseImage.length>1){
                     byte[] data = DatatypeConverter.parseBase64Binary(baseImage[1]);
@@ -127,22 +131,6 @@ public class ShalomService {
         }else {
             shalomLikeRepo.updateLike(userId, shalomId, flag);
         }
-    }
-
-    public String generatingRandomAlphanumericString(String userId, String fileExt) {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
-        Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        System.out.println(generatedString);
-        return userId+"/"+generatedString+"."+fileExt.trim();
     }
 
     public List<IUserFollow> findFollowers(Long followId, Boolean flag){

@@ -1,12 +1,14 @@
 package com.shalom.shalomapi.service;
 
-import com.shalom.shalomapi.model.CustomUser;
-import com.shalom.shalomapi.model.IEditUserProfile;
-import com.shalom.shalomapi.model.IUser;
-import com.shalom.shalomapi.model.UserProfile;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.repository.UserProfileRepository;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,16 +19,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserProfileService implements UserDetailsService {
 
     @Autowired
     private UserProfileRepository userProfileRepo;
+
+    @Autowired
+    private DocumentService docService;
+
+    @Autowired
+    private Utils utils;
 
 /*
     @Autowired
@@ -118,4 +130,51 @@ public class UserProfileService implements UserDetailsService {
         return userProfileRepo.getUsers(userId, followFlag);
     }
 
+    public void updateUserProfilePic(Long userId, String profilePic) {
+        try {
+                Document doc = Jsoup.parse(profilePic);
+                //Element div = doc.body();
+                //Elements img = doc.select("img");
+                //System.out.println("parsed html"+ div.text());
+                System.out.println("parsed image"+ doc.body().text().split("base64,"));
+
+               // Elements elements = doc.getElementsByTag("img");
+                String s3FilePath = "";
+                int i=1;
+               // for (Element element : elements) {
+                  //  if (element.attr("src").startsWith("data:image")) {
+                       // System.out.println(element.attr("src"));
+                        String[] baseImage = doc.body().text().split("base64,");
+                        System.out.println(baseImage[0]);
+                        // Note preferred way of declaring an array variable
+                        String[] mimeType = baseImage[0].split(":"); //data:image/jpeg
+                        String fileMimeType= mimeType.length>1?mimeType[1].substring(0, mimeType[1].length() - 1):"image/jpeg";
+                       // System.out.println(fileMimeType+elements.size());
+                        String[] fileExt = fileMimeType.split("/");
+                        String fileExtType= fileExt.length>1?fileExt[1]:"jpeg";
+                        String s3FileName = utils.generatingRandomAlphanumericString(userId.toString()+"/profile", fileExtType);
+
+                        if(baseImage.length>=1){
+                            byte[] data = DatatypeConverter.parseBase64Binary(baseImage[1]);
+                            InputStream stream = new ByteArrayInputStream(data);
+                            ObjectMetadata meta = new ObjectMetadata();
+                            meta.setContentLength(data.length);
+                            meta.setContentType(fileMimeType);
+                            s3FilePath += docService.upload(stream, meta, s3FileName,0, i);
+                            //i++;
+                        }
+                  //  }
+              //  }
+
+            userProfileRepo.updateUserProfilePic(userId, s3FilePath);
+        } catch(ConstraintViolationException ex){
+            System.out.println(ex.getStackTrace());
+        } catch(Exception ex){
+            System.out.println(ex.getStackTrace());
+        }
+    }
+
+    public String findProfilePic(Long userId){
+        return userProfileRepo.findImageUrlByUserId(userId);
+    }
 }

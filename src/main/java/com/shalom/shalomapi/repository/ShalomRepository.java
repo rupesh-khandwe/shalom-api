@@ -3,7 +3,9 @@ package com.shalom.shalomapi.repository;
 import com.shalom.shalomapi.model.IShalomLikeComment;
 import com.shalom.shalomapi.model.Shalom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,8 +29,10 @@ public interface ShalomRepository extends JpaRepository<Shalom, Long> {
 
     @Query(value = "SELECT shl.shalom_id as shalomId, shl.user_id as userId, shl.user_name as userName, shl.shalom_flag as shalomFlag, shl.shalom as shalom, shl.created_on as createdOn, shl.updated_on as updatedOn, shl.image_url as imageUrl, shl.video_url as videoUrl,  lkflg.like_flag as likeFlag, " +
                     "COUNT(DISTINCT lk.user_id) AS \"likeCount\","+
-                    "COUNT( cmt.user_id) AS \"commentCount\" "+
+                    "COUNT( cmt.user_id) AS \"commentCount\", " +
+                    "up.image_url AS profileImageUrl "+
                     "FROM shalom.shalom AS shl "+
+                    "JOIN shalom.userprofile up ON up.user_id = shl.user_id "+
                     "LEFT OUTER JOIN shalom.shalomlike AS lk "+
                     "ON shl.shalom_id = lk.shalom_id "+
                     "AND lk.like_flag=true "+
@@ -38,7 +42,7 @@ public interface ShalomRepository extends JpaRepository<Shalom, Long> {
                     "LEFT OUTER JOIN shalom.shalomcomment AS cmt "+
                     "ON shl.shalom_id = cmt.shalom_id "+
                     "WHERE shl.user_id IN (SELECT uf.follow_id FROM shalom.userfollow uf WHERE uf.user_id=:userId AND uf.follow_flag=true) OR shl.user_id=:userId "+
-                    "GROUP BY shl.shalom_id, lk.like_flag, lkflg.like_flag "+
+                    "GROUP BY shl.shalom_id, lk.like_flag, lkflg.like_flag, up.image_url "+
                     "ORDER BY shl.created_on DESC",  nativeQuery = true)
     List<IShalomLikeComment> findAllLikeComment(Long userId);
 

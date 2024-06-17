@@ -30,9 +30,9 @@ public class ChurchService {
         return churchRepo.findAll();
     }
 
-    public List<IChurch> findChurchBySearchKey(String key, Long cityId){
+    public List<IChurch> findChurchBySearchKey(){
 
-         return churchRepo.findByChurchNameContainingOrAddressline1ContainingOrAddressline2ContainingCaseInsensitive(key.toLowerCase(), cityId);
+         return churchRepo.findByChurchNameContainingOrAddressline1ContainingOrAddressline2ContainingCaseInsensitive();
     }
 
     public void registerChurch(Church church) {

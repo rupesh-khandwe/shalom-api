@@ -67,7 +67,7 @@ public class UserProfileController {
                         .accessToken(jwtService.generateToken(authRequestDTO.getUsername()))
                         .refreshToken(refreshToken.getToken())
                         .userId(user.getUserId())
-                        .userName(WordUtils.capitalizeFully(user.getUserFirstName()))
+                        .userName(WordUtils.capitalizeFully(user.getUserFirstName())+" "+WordUtils.capitalizeFully(user.getUserLastName()))
                         .build(), HttpStatus.OK);
             }
         } catch (BadCredentialsException e) {

@@ -31,8 +31,8 @@ public class ChurchController {
 
     @GetMapping("/searchByKey")
     public List<IChurch> getChurchBySearchKey(@RequestParam(name = "key", defaultValue = "Bengaluru") String key){
-        Long cityId = Long.parseLong("228");
-        return churchService.findChurchBySearchKey(key, cityId);
+        //Long cityId = Long.parseLong("228");
+        return churchService.findChurchBySearchKey();
     }
 
     @PostMapping("/register")
@@ -48,8 +48,8 @@ public class ChurchController {
     @DeleteMapping("/delete")
     public List<IChurch> deleteChurch(@RequestParam(name = "id") String id){
         churchService.deleteChurch(Long.parseLong(id));
-        Long cityId = Long.parseLong("228");
-        return churchService.findChurchBySearchKey("Bengaluru",cityId);
+        //Long cityId = Long.parseLong("228");
+        return churchService.findChurchBySearchKey();
     }
 
 }

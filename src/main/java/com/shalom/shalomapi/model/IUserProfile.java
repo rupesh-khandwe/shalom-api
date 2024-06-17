@@ -8,4 +8,5 @@ public interface IUserProfile {
     String getUserCity();
     String getUserState();
     String getUserCountry();
+    String getImageUrl();
 }

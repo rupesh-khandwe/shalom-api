@@ -32,6 +32,7 @@ public class UserProfile {
     private LocalDateTime lastLogin;
     private String userName;
     private String password;
+    private String imageUrl;
 
     public UserProfile(){
 
@@ -50,15 +51,16 @@ public class UserProfile {
                 ", phone2='" + phone2 + '\'' +
                 ", addressLine1='" + addressLine1 + '\'' +
                 ", addressLine2='" + addressLine2 + '\'' +
-                ", countryId='" + countryId + '\'' +
-                ", stateId='" + stateId + '\'' +
-                ", cityId='" + cityId + '\'' +
-                ", regionId='" + regionId + '\'' +
+                ", countryId=" + countryId +
+                ", stateId=" + stateId +
+                ", cityId=" + cityId +
+                ", regionId=" + regionId +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 ", lastLogin=" + lastLogin +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }
