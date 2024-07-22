@@ -1,23 +1,16 @@
-package com.shalom.shalomapi.model;
+package com.shalom.shalomapi.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Arrays;
 
 @Data
-@Entity
-@Table(name="event", schema="shalom")
-public class Event {
+public class EventDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
+
     private Long eventId;
     private Long userId;
     private Long categoryId;
@@ -38,15 +31,15 @@ public class Event {
     private LocalDateTime createdOn;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updatedOn;
-    private String imageUrl;
+    private String[] imageUrl;
 
-    public Event(){
+    public EventDTO(){
 
     }
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "EventDTO{" +
                 "eventId=" + eventId +
                 ", userId=" + userId +
                 ", categoryId=" + categoryId +
@@ -65,7 +58,7 @@ public class Event {
                 ", createdBy='" + createdBy + '\'' +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imageUrl=" + Arrays.toString(imageUrl) +
                 '}';
     }
 }

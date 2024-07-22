@@ -6,7 +6,7 @@ import java.util.Random;
 
 @Service
 public class Utils {
-     String generatingRandomAlphanumericString(String userId, String fileExt) {
+     String generatingRandomAlphanumericString(String id, String fileExt) {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'
         int targetStringLength = 10;
@@ -19,6 +19,6 @@ public class Utils {
                 .toString();
 
         System.out.println(generatedString);
-        return userId+"/"+generatedString+"."+fileExt.trim();
+        return id+"/"+generatedString+"."+fileExt.trim();
     }
 }

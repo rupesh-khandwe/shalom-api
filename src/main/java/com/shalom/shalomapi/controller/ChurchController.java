@@ -1,7 +1,9 @@
 package com.shalom.shalomapi.controller;
 
+import com.shalom.shalomapi.dto.ChurchDTO;
 import com.shalom.shalomapi.model.Church;
 import com.shalom.shalomapi.model.IChurch;
+import com.shalom.shalomapi.model.Language;
 import com.shalom.shalomapi.service.ChurchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +38,7 @@ public class ChurchController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> postChurch(@RequestBody Church church) throws Exception {
+    public ResponseEntity<?> postChurch(@RequestBody ChurchDTO church) throws Exception {
         try{
             churchService.registerChurch(church);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -50,6 +52,12 @@ public class ChurchController {
         churchService.deleteChurch(Long.parseLong(id));
         //Long cityId = Long.parseLong("228");
         return churchService.findChurchBySearchKey();
+    }
+
+    @GetMapping("/language")
+    public List<Language> getAllLanguage(){
+
+        return churchService.getAllLanguage();
     }
 
 }

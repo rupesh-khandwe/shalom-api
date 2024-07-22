@@ -136,8 +136,8 @@ public class ShalomController {
     @PutMapping("/profilepic")
     public ResponseEntity<String> updateProfilePic(@RequestBody UserProfileDTO userProfileDTO) throws Exception {
         try {
-            userProfileService.updateUserProfilePic(userProfileDTO.getUserId(), userProfileDTO.getProfilePic());
-            return new ResponseEntity<String>(HttpStatus.OK);
+            String profilePicPath = userProfileService.updateUserProfilePic(userProfileDTO.getUserId(), userProfileDTO.getProfilePic());
+            return new ResponseEntity<String>(profilePicPath,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
@@ -165,6 +165,20 @@ public class ShalomController {
 
     @GetMapping("/profilePic")
     public String findProfilePic(@RequestParam(name="userId") String userId){
-        return userProfileService.findProfilePic(Long.parseLong(userId));
+        try{
+            return userProfileService.findProfilePic(Long.parseLong(userId));
+        } catch (NumberFormatException ex){
+            System.out.println(ex.getMessage());
+            return "ERROR";
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return "ERROR";
+        }
+    }
+
+    @PostMapping("/donate")
+    public ResponseEntity<String> saveDonation(@RequestBody Donation donation){
+        shalomService.saveDonation(donation);
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 }

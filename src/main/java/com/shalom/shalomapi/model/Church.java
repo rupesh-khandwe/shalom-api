@@ -41,6 +41,9 @@ public class Church {
     //@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ", shape = JsonFormat.Shape.STRING)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updatedOn;
+    private String imageUrl;
+    private Long languageId;
+    private String aboutChurch;
 
     public Church(){
 
@@ -64,6 +67,9 @@ public class Church {
                 ", createdBy='" + createdBy + '\'' +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", languageId=" + languageId +
+                ", aboutChurch='" + aboutChurch + '\'' +
                 '}';
     }
 }

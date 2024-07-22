@@ -10,5 +10,5 @@ public interface IUserFollow {
     Boolean getFollowFlag();
     String getFirstName();
     String getLastName();
-
+    String getProfilePic();
 }

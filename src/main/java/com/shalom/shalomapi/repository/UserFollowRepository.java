@@ -22,7 +22,8 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
 
     public UserFollow findByUserIdAndFollowId(Long userId, Long followId);
 
-    @Query(value = "Select uf.follow_seq_id as followSeqId, uf.user_id as userId, uf.follow_id as followId, uf.follow_flag as followFlag, up.first_name as firstName, up.last_name as lastName\n" +
+    @Query(value = "Select uf.follow_seq_id as followSeqId, uf.user_id as userId, uf.follow_id as followId, uf.follow_flag as followFlag, up.first_name as firstName," +
+            " up.last_name as lastName, up.image_url as profilePic\n" +
             "From shalom.userfollow uf\n" +
             "JOIN shalom.userprofile up ON up.user_id = uf.follow_id\n" +
             "where uf.user_id=:userId\n" +
@@ -30,7 +31,8 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
             "ORDER BY uf.created_on DESC",  nativeQuery = true)
     List<IUserFollow> findByUserId(Long userId, Boolean flag);
 
-    @Query(value = "Select uf.follow_seq_id as followSeqId, uf.user_id as userId, uf.follow_id as followId, uf.follow_flag as followFlag, up.first_name as firstName, up.last_name as lastName\n" +
+    @Query(value = "Select uf.follow_seq_id as followSeqId, uf.user_id as userId, uf.follow_id as followId, uf.follow_flag as followFlag, up.first_name as firstName, " +
+            "up.last_name as lastName, up.image_url as profilePic\n" +
             "From shalom.userfollow uf\n" +
             "JOIN shalom.userprofile up ON up.user_id = uf.user_id\n" +
             "where uf.follow_id=:followId\n" +

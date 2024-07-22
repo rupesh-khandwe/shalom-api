@@ -130,7 +130,8 @@ public class UserProfileService implements UserDetailsService {
         return userProfileRepo.getUsers(userId, followFlag);
     }
 
-    public void updateUserProfilePic(Long userId, String profilePic) {
+    public String updateUserProfilePic(Long userId, String profilePic) {
+        String s3FilePath = "";
         try {
                 Document doc = Jsoup.parse(profilePic);
                 //Element div = doc.body();
@@ -139,7 +140,6 @@ public class UserProfileService implements UserDetailsService {
                 System.out.println("parsed image"+ doc.body().text().split("base64,"));
 
                // Elements elements = doc.getElementsByTag("img");
-                String s3FilePath = "";
                 int i=1;
                // for (Element element : elements) {
                   //  if (element.attr("src").startsWith("data:image")) {
@@ -166,12 +166,14 @@ public class UserProfileService implements UserDetailsService {
                   //  }
               //  }
 
-            userProfileRepo.updateUserProfilePic(userId, s3FilePath);
+                userProfileRepo.updateUserProfilePic(userId, s3FilePath);
+
         } catch(ConstraintViolationException ex){
             System.out.println(ex.getStackTrace());
         } catch(Exception ex){
             System.out.println(ex.getStackTrace());
         }
+        return s3FilePath;
     }
 
     public String findProfilePic(Long userId){

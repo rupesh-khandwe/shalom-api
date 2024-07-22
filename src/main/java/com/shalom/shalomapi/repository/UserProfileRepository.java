@@ -58,7 +58,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
             "where user_id=:userId",  nativeQuery = true)
     public void saveOrUpdate(Long userId, String email, String firstName, String middleName, String lastName, String phone1, String phone2, String addressLine1, String addressLine2, Long stateId, Long cityId, Long regionId);
 
-    @Query(value="SELECT up.user_id as userId, (coalesce(up.first_name, '')|| ' ' || coalesce(up.last_name, '')) as userName \n" +
+    @Query(value="SELECT up.user_id as userId, (coalesce(up.first_name, '')|| ' ' || coalesce(up.last_name, '')) as userName, up.image_url as profilePic \n" +
             "FROM shalom.userprofile up\n" +
             "WHERE up.user_id NOT IN (SELECT uf.follow_id FROM shalom.userfollow uf WHERE uf.user_id=:userId AND uf.follow_flag=:followFlag)\n" +
             "AND up.user_id!=:userId", nativeQuery = true)

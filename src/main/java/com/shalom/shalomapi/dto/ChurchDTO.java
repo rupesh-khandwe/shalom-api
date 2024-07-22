@@ -1,30 +1,19 @@
-package com.shalom.shalomapi.model;
+package com.shalom.shalomapi.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Arrays;
 
 @Data
-@Entity
-@Table(name="event", schema="shalom")
-public class Event {
+public class ChurchDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
-    private Long eventId;
+    private Long churchId;
     private Long userId;
-    private Long categoryId;
-    private String title;
-    private String description;
-    private String eventDate;
-    private String eventTime;
+    private String churchName;
+    private String churchWebsiteUrl;
     private String phone1;
     private String phone2;
     private String addressline1;
@@ -38,22 +27,21 @@ public class Event {
     private LocalDateTime createdOn;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updatedOn;
-    private String imageUrl;
+    private String[] imageUrl;
+    private Long languageId;
+    private String aboutChurch;
 
-    public Event(){
+    public ChurchDTO(){
 
     }
 
     @Override
     public String toString() {
-        return "Event{" +
-                "eventId=" + eventId +
+        return "ChurchDTO{" +
+                "churchId=" + churchId +
                 ", userId=" + userId +
-                ", categoryId=" + categoryId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", eventDate='" + eventDate + '\'' +
-                ", eventTime='" + eventTime + '\'' +
+                ", churchName='" + churchName + '\'' +
+                ", churchWebsiteUrl='" + churchWebsiteUrl + '\'' +
                 ", phone1='" + phone1 + '\'' +
                 ", phone2='" + phone2 + '\'' +
                 ", addressline1='" + addressline1 + '\'' +
@@ -65,7 +53,9 @@ public class Event {
                 ", createdBy='" + createdBy + '\'' +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imageUrl=" + Arrays.toString(imageUrl) +
+                ", languageId=" + languageId +
+                ", aboutChurch='" + aboutChurch + '\'' +
                 '}';
     }
 }

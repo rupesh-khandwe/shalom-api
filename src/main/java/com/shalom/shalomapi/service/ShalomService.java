@@ -2,10 +2,7 @@ package com.shalom.shalomapi.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.shalom.shalomapi.model.*;
-import com.shalom.shalomapi.repository.ShalomCommentRepository;
-import com.shalom.shalomapi.repository.ShalomLikeRepository;
-import com.shalom.shalomapi.repository.ShalomRepository;
-import com.shalom.shalomapi.repository.UserFollowRepository;
+import com.shalom.shalomapi.repository.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,6 +34,9 @@ public class ShalomService {
 
     @Autowired
     private UserFollowRepository userFollowRepo;
+
+    @Autowired
+    private DonationRepository donationRepo;
 
     @Autowired
     private Utils utils;
@@ -156,5 +156,9 @@ public class ShalomService {
 
     public void deleteShalom(Long id){
         shalomRepo.deleteById(id);
+    }
+
+    public void saveDonation(Donation donation){
+        donationRepo.save(donation);
     }
 }

@@ -6,6 +6,7 @@ public interface IEvent {
     Long getEventId();
     Long getUserId();
     Long getCategoryId();
+    String getCategoryName();
     String getTitle();
     String getDescription();
     String getEventDate();
@@ -26,4 +27,5 @@ public interface IEvent {
     String getUserCountryName();
     String getCreatedBy();
     String getProfileImageUrl();
+    String getEventImageUrl();
 }

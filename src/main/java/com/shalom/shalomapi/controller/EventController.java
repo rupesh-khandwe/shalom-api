@@ -1,5 +1,6 @@
 package com.shalom.shalomapi.controller;
 
+import com.shalom.shalomapi.dto.EventDTO;
 import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/id")
-    public Event getEventById(@RequestParam(name = "id", defaultValue = "1") String id){
+    public IEvent getEventById(@RequestParam(name = "id", defaultValue = "1") String id){
         return eventService.findById(Long.parseLong(id));
     }
 
@@ -32,7 +33,7 @@ public class EventController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> saveEvent(@RequestBody Event event) throws Exception {
+    public ResponseEntity<?> saveEvent(@RequestBody EventDTO event) throws Exception {
         try{
             eventService.save(event);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -45,6 +46,11 @@ public class EventController {
     public List<IEvent> deleteEvent(@RequestParam(name = "id") String id, @RequestParam(name = "userId") String userId){
         eventService.deleteEvent(Long.parseLong(id));
         return eventService.findByUserId(Long.parseLong(userId));
+    }
+
+    @GetMapping("/notification")
+    public List<IEventNotify> getEventNotification(@RequestParam(name = "id", defaultValue = "1") String id) {
+        return eventService.findNotificationByUserId(Long.parseLong(id));
     }
 
 }

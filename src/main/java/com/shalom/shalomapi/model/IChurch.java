@@ -24,4 +24,8 @@ public interface IChurch {
     String getUserCountryName();
     String getCreatedBy();
     String getProfileImageUrl();
+    String getChurchImageUrl();
+    String getLanguageName();
+    String getAboutChurch();
+
 }
