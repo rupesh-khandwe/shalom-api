@@ -1,28 +1,11 @@
 package com.shalom.shalomapi.Config;
 
-import java.io.IOException;
-
-/*import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.shalom.shalomapi.service.UserProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;*/
-
-
 import com.shalom.shalomapi.service.JwtService;
 import com.shalom.shalomapi.service.UserProfileService;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -32,6 +15,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -51,19 +36,29 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
 		String username = null;
+		boolean isGoogleTokenValid = false;
 
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
-			username = jwtService.extractUsername(token);
+			isGoogleTokenValid = jwtService.isGoogleTokenValid(token);
+			username = isGoogleTokenValid ? jwtService.extractGoogleEmailFromToken(token) : jwtService.extractUsername(token);
 		}
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = userProfileService.loadUserByUsername(username);
-			//UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
-			if (jwtService.validateToken(token, userDetails)) {
-				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+			if (isGoogleTokenValid) {
+				UserDetails userDetails = new User(username, username, Collections.emptyList());
+				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
+						null, userDetails.getAuthorities());
+
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+			} else {
+				UserDetails userDetails = userProfileService.loadUserByUsername(username);
+				//UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+				if (jwtService.validateToken(token, userDetails)) {
+					UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+				}
 			}
 		}
 

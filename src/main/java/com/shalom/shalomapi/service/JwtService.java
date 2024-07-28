@@ -1,10 +1,12 @@
 package com.shalom.shalomapi.service;
 
+import com.shalom.shalomapi.google.GoogleDataProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -19,10 +21,20 @@ import java.util.function.Function;
 public class JwtService {
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
+    @Autowired
+    private GoogleDataProvider googleDataProvider;
     @Value("${jwt.refreshtoken.expiry}")
     private Long refreshtokenExpiry;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractGoogleEmailFromToken(String token) {
+        return googleDataProvider.getData(token).getEmail();
+    }
+
+    public boolean isGoogleTokenValid(String token) {
+        return googleDataProvider.isGoogleTokenValid(token);
     }
 
     public Date extractExpiration(String token) {

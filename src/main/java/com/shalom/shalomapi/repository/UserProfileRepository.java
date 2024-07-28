@@ -16,6 +16,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
     public UserProfile findByUserNameAndPassword(String userName, String password);
 
     public UserProfile findByUserName(String userName);
+    UserProfile findByEmail(String email);
 
     @Query(value = "SELECT up.email as userEmail, up.first_name as userFirstName, up.middle_name as userMiddleName, up.last_name as userLastName, up.phone1 as userPhone1, up.phone2 as userPhone2,\n" +
             "up.address_line1 as userAddressLine1, up.address_line2 as userAddressLine2, up.user_name as userName,\n" +

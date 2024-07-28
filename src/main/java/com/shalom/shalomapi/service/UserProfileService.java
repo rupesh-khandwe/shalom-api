@@ -45,26 +45,18 @@ public class UserProfileService implements UserDetailsService {
     private PasswordEncoder bcryptEncoder;
 */
     public void saveUserProfile(UserProfile userProfile) {
-        //userProfile.setPassword(bcryptEncoder.encode(userProfile.getPassword()));
-        UserProfile userProf = new UserProfile();
-        userProf.setUserName(userProfile.getUserName());
-        userProf.setPassword(new BCryptPasswordEncoder().encode(userProfile.getPassword()));
-        userProf.setEmail(userProfile.getEmail());
-        userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getFirstName()));
-        //userProf.setFirstName(WordUtils.capitalizeFully(userProfile.getMiddleName()));
-        userProf.setLastName(WordUtils.capitalizeFully(userProfile.getLastName()));
-        userProf.setGender(userProfile.getGender());
-        userProf.setPhone1(userProfile.getPhone1());
-        userProf.setPhone2(userProfile.getPhone2());
-        userProf.setAddressLine1(userProfile.getAddressLine1());
-        userProf.setAddressLine2(userProfile.getAddressLine2());
-        //userProf.setCountryId(userProfile.getCountryId());
-        userProf.setCountryId(Long.parseLong("78"));
-        userProf.setStateId(userProfile.getStateId());
-        userProf.setCityId(userProfile.getCityId());
-        userProf.setRegionId(userProfile.getRegionId());
-        userProf.setCreatedOn((new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-        userProfileRepo.save(userProf);
+        UserProfile userProfile1 = userProfileRepo.findByEmail(userProfile.getEmail());
+        if (userProfile1 != null) {
+            userProfile.setUserId(userProfile1.getUserId());
+        }
+        if (userProfile.getPassword() != null && !userProfile.getPassword().isEmpty()) {
+            userProfile.setPassword(new BCryptPasswordEncoder().encode(userProfile.getPassword()));
+        }
+        userProfile.setFirstName(WordUtils.capitalizeFully(userProfile.getFirstName()));
+        userProfile.setLastName(WordUtils.capitalizeFully(userProfile.getLastName()));
+        userProfile.setCountryId(Long.parseLong("78"));
+        userProfile.setCreatedOn((new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        userProfileRepo.save(userProfile);
     }
 
    /* public UserDetails getUserByNameAndPassword(String userName, String password) throws UsernameNotFoundException {
