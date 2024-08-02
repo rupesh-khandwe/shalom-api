@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import static java.util.Collections.singletonList;
 
 @Configuration
-@EnableConfigurationProperties(GoogleProps.class)
 public class GoogleConfig {
 	
 	private final GoogleProps googleProps;
