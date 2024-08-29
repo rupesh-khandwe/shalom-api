@@ -27,5 +27,5 @@ public interface IChurch {
     String getChurchImageUrl();
     String getLanguageName();
     String getAboutChurch();
-
+    Long getLanguageId();
 }

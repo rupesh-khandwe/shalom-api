@@ -29,7 +29,7 @@ public interface ShalomRepository extends JpaRepository<Shalom, Long> {
 
     @Query(value = "SELECT shl.shalom_id as shalomId, shl.user_id as userId, shl.user_name as userName, shl.shalom_flag as shalomFlag, shl.shalom as shalom, shl.created_on as createdOn, shl.updated_on as updatedOn, shl.image_url as imageUrl, shl.video_url as videoUrl,  lkflg.like_flag as likeFlag, " +
                     "COUNT(DISTINCT lk.user_id) AS \"likeCount\","+
-                    "COUNT( cmt.user_id) AS \"commentCount\", " +
+                    "COUNT(DISTINCT cmt.shalom_comment_id) AS \"commentCount\", " +
                     "up.image_url AS profileImageUrl "+
                     "FROM shalom.shalom AS shl "+
                     "JOIN shalom.userprofile up ON up.user_id = shl.user_id "+

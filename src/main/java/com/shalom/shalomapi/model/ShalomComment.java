@@ -19,6 +19,7 @@ public class ShalomComment {
     private Long shalomId;
     private String shalomComment;
     //private Boolean commentFlag;
+    private LocalDateTime createdOn;
 
     public ShalomComment(){
 
@@ -32,6 +33,7 @@ public class ShalomComment {
                 ", userName='" + userName + '\'' +
                 ", shalomId=" + shalomId +
                 ", shalomComment='" + shalomComment + '\'' +
+                ", createdOn=" + createdOn +
                 '}';
     }
 }

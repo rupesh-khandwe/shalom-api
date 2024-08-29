@@ -54,6 +54,9 @@ public class EventService {
     public Event save(EventDTO eventDto){
         //return eventRepo.save(event);
         Event event = new Event();
+        if(eventDto.getEventId()!=null){
+            event.setEventId(eventDto.getEventId());
+        }
         event.setUserId(eventDto.getUserId());
         event.setCategoryId(eventDto.getCategoryId());
         event.setTitle(eventDto.getTitle());
@@ -71,6 +74,7 @@ public class EventService {
         event.setCreatedBy(eventDto.getCreatedBy());
         event.setCreatedOn(eventDto.getCreatedOn());
         event.setUpdatedOn(eventDto.getUpdatedOn());
+        event.setLanguageId(eventDto.getLanguageId());
         String imageSeparator = "|";
 
         //event.setImageUrl();

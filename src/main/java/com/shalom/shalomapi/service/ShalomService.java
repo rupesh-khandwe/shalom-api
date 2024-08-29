@@ -52,7 +52,7 @@ public class ShalomService {
         return shalomRepo.findByUserId(userId);
     }
 
-    public List<ShalomComment> findCommentByShalomId(Long shalomId){
+    public List<IShalomComment> findCommentByShalomId(Long shalomId){
         return shalomCommentRepo.findByShalomId(shalomId);
     }
 

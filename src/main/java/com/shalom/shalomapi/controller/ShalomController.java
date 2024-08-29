@@ -38,7 +38,7 @@ public class ShalomController {
 
 
     @GetMapping("/comment")
-    public List<ShalomComment> getCommentByShalomId (@RequestParam(name = "id", defaultValue = "1") String id) {
+    public List<IShalomComment> getCommentByShalomId (@RequestParam(name = "id", defaultValue = "1") String id) {
         return shalomService.findCommentByShalomId(Long.parseLong(id));
     }
 

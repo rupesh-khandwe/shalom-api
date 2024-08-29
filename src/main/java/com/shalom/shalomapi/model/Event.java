@@ -39,6 +39,7 @@ public class Event {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updatedOn;
     private String imageUrl;
+    private Long languageId;
 
     public Event(){
 
@@ -66,6 +67,7 @@ public class Event {
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", languageId=" + languageId +
                 '}';
     }
 }

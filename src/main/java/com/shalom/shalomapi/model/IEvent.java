@@ -28,4 +28,6 @@ public interface IEvent {
     String getCreatedBy();
     String getProfileImageUrl();
     String getEventImageUrl();
+    String getLanguageName();
+    Long getLanguageId();
 }

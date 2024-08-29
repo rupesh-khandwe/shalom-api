@@ -32,6 +32,7 @@ public class EventDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updatedOn;
     private String[] imageUrl;
+    private Long languageId;
 
     public EventDTO(){
 
@@ -59,6 +60,7 @@ public class EventDTO {
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 ", imageUrl=" + Arrays.toString(imageUrl) +
+                ", languageId=" + languageId +
                 '}';
     }
 }

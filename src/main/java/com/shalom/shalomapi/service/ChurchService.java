@@ -56,6 +56,10 @@ public class ChurchService {
     public void registerChurch(ChurchDTO church) {
         //church.setPassword(bcryptEncoder.encode(church.getPassword()));
         Church newChurch = new Church();
+        if(church.getChurchId()!=null){
+            System.out.println("church is there ");
+            newChurch.setChurchId(church.getChurchId());
+        }
         newChurch.setUserId(church.getUserId());
         newChurch.setChurchName(church.getChurchName());
         newChurch.setChurchWebsiteUrl(church.getChurchWebsiteUrl());

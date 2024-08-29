@@ -15,7 +15,7 @@ public interface ChurchRepository extends JpaRepository<Church, Long> {
     Church findByChurchId(Long id);
 
 
-    @Query(value = "select ch.church_id as churchId, ch.user_id as userId, ch.church_name as churchName, lg.language_name as languageName, ch.church_website_url as churchWebsiteUrl, ch.phone1 as phone1, ch.phone2 as phone2, ch.addressline1 as addressLine1, ch.addressline2 as addressLine2, ch.created_on as createdOn, ch.updated_on as updatedOn,  ch.created_by as createdBy, " +
+    @Query(value = "select ch.church_id as churchId, ch.user_id as userId, ch.church_name as churchName, ch.language_id as languageId, lg.language_name as languageName, ch.church_website_url as churchWebsiteUrl, ch.phone1 as phone1, ch.phone2 as phone2, ch.addressline1 as addressLine1, ch.addressline2 as addressLine2, ch.created_on as createdOn, ch.updated_on as updatedOn,  ch.created_by as createdBy, " +
             "rg.region_id as regionId, rg.region_name as userRegionName,ct.city_id as cityId, ct.city_name as userCityName, st.state_id as stateId, st.state_name as userStateName, cnt.country_id as countryId, cnt.country_name as userCountryName,\n" +
             "up.image_url AS profileImageUrl, ch.image_url as churchImageUrl, ch.about_church as aboutChurch "+
             "from shalom.church ch " +
