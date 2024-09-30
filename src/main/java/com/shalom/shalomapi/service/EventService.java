@@ -40,7 +40,7 @@ public class EventService {
     }
 
     public List<IEvent> findByUserId(Long userId){
-        return eventRepo.findByUserId(userId);
+        return eventRepo.findAllEvents();
     }
 
     public List<IEventNotify> findNotificationByUserId(Long userId){

@@ -56,6 +56,7 @@ public class UserProfileService implements UserDetailsService {
         userProfile.setLastName(WordUtils.capitalizeFully(userProfile.getLastName()));
         userProfile.setCountryId(Long.parseLong("78"));
         userProfile.setCreatedOn((new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        userProfile.setImageUrl(userProfile.getImageUrl());
         userProfileRepo.save(userProfile);
     }
 
