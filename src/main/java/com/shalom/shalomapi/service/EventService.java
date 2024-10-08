@@ -17,8 +17,11 @@ import org.jsoup.Jsoup;
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class EventService {
@@ -61,7 +64,11 @@ public class EventService {
         event.setCategoryId(eventDto.getCategoryId());
         event.setTitle(eventDto.getTitle());
         event.setDescription(eventDto.getDescription());
-        event.setEventDate(eventDto.getEventDate());
+        String inputFormat = "MM/dd/yyyy";
+        String outputFormat = "dd/MM/yyyy";
+        LocalDate date = LocalDate.parse(eventDto.getEventDate(), DateTimeFormatter.ofPattern(inputFormat));
+        String outputDate = date.format(DateTimeFormatter.ofPattern(outputFormat));
+        event.setEventDate(outputDate);
         event.setEventTime(eventDto.getEventTime());
         event.setPhone1(eventDto.getPhone1());
         event.setPhone2(eventDto.getPhone2());
