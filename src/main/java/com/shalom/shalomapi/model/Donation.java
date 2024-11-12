@@ -16,6 +16,8 @@ public class Donation {
     private Long userId;
     private String phone;
     private Long amount;
+    private String currency;
+    private String razorpayPaymentId;
 
     public Donation(){
 
@@ -28,6 +30,8 @@ public class Donation {
                 ", userId=" + userId +
                 ", phone='" + phone + '\'' +
                 ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                ", razorpayPaymentId='" + razorpayPaymentId + '\'' +
                 '}';
     }
 }

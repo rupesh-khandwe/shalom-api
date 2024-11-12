@@ -60,15 +60,27 @@ public class EventService {
         if(eventDto.getEventId()!=null){
             event.setEventId(eventDto.getEventId());
         }
+        //2024-11-10T00:15:00.000Z
+        //DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        //DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyy", Locale.ENGLISH);
+        //LocalDate date = LocalDate.parse("2018-04-10T04:00:00.000Z", inputFormatter);
+        //String formattedDate = outputFormatter.format(date);
+        //System.out.println(formattedDate); // prints 10-04-2018
         event.setUserId(eventDto.getUserId());
         event.setCategoryId(eventDto.getCategoryId());
         event.setTitle(eventDto.getTitle());
         event.setDescription(eventDto.getDescription());
-        String inputFormat = "MM/dd/yyyy";
-        String outputFormat = "dd/MM/yyyy";
-        LocalDate date = LocalDate.parse(eventDto.getEventDate(), DateTimeFormatter.ofPattern(inputFormat));
-        String outputDate = date.format(DateTimeFormatter.ofPattern(outputFormat));
-        event.setEventDate(outputDate);
+        //String inputFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        //String outputFormat = "dd/MM/yyyy";
+        System.out.println("UI event date "+ eventDto.getEventDate());
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
+        //LocalDate date = LocalDate.parse(eventDto.getEventDate(), inputFormatter);
+        //String outputDate = date.format(DateTimeFormatter.ofPattern(outputFormat));
+        LocalDate date = LocalDate.parse(eventDto.getEventDate(), inputFormatter);
+        String formattedDate = outputFormatter.format(date.plusDays(1));
+        System.out.println("API event date "+ formattedDate); // prints 10-04-2018
+        event.setEventDate(formattedDate);
         event.setEventTime(eventDto.getEventTime());
         event.setPhone1(eventDto.getPhone1());
         event.setPhone2(eventDto.getPhone2());
@@ -88,11 +100,11 @@ public class EventService {
         Event newEvent = eventRepo.saveAndFlush(event);
 
         int i=1;
-        String s3FilePath = "";
+         String s3FilePath = "";
         for(String imageUrl : eventDto.getImageUrl()){
 
             Document doc = Jsoup.parse(imageUrl);
-            System.out.println("parsed image"+ doc.body().text().split("base64,"));
+            //System.out.println("parsed image"+ doc.body().text().split("base64,"));
 
             String[] baseImage = doc.body().text().split("base64,");
             // Note preferred way of declaring an array variable
