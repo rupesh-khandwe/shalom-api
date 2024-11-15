@@ -1,6 +1,6 @@
 package com.shalom.shalomapi.controller;
 
-import com.shalom.shalomapi.model.Version;
+import com.shalom.shalomapi.model.AppVersion;
 import com.shalom.shalomapi.service.VersionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class VersionController {
     }
 
     @PostMapping("/update-version")
-    public ResponseEntity<String> updateVersion(@RequestBody Version version) {
+    public ResponseEntity<String> updateVersion(@RequestBody AppVersion version) {
         versionService.updateVersion(version);
         return ResponseEntity.ok("Version updated successfully");
     }

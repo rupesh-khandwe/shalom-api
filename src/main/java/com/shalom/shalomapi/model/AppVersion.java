@@ -1,15 +1,13 @@
 package com.shalom.shalomapi.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
 @Data
-public class Version {
+@Table(name="appversion", schema="shalom")
+public class AppVersion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
