@@ -1,5 +1,6 @@
 package com.shalom.shalomapi.controller;
 
+import com.shalom.shalomapi.dto.ShalomUniversalDTO;
 import com.shalom.shalomapi.dto.UserProfileDTO;
 import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.service.ShalomService;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/shalom")
@@ -32,7 +32,7 @@ public class ShalomController {
     }
 
     @GetMapping("/user")
-    public List<Shalom> getShalomByUserId(@RequestParam(name = "id", defaultValue = "1") String id) {
+    public List<ShalomUniversalDTO> getShalomByUserId(@RequestParam(name = "id", defaultValue = "1") String id) {
         return shalomService.findByUserId(Long.parseLong(id));
     }
 
@@ -54,7 +54,7 @@ public class ShalomController {
 //    }
 
     @GetMapping("/shalomsWithLikeComment")
-    public List<IShalomLikeComment> getAllLikeComment(@RequestParam(name = "userId") String userId){
+    public List<ShalomUniversalDTO> getAllLikeComment(@RequestParam(name = "userId") String userId){
         return shalomService.findAllLikeComment(Long.parseLong(userId));
 //        List<Shalom> shaloms = shalomService.findAllLikeComment();
 //        return shaloms.stream()
@@ -68,7 +68,7 @@ public class ShalomController {
     }
 
     @PutMapping("/saveLike")
-    public List<IShalomLikeComment> updateLike(@RequestParam(name = "userId") String userId, @RequestParam(name = "shalomId") String shalomId, @RequestParam(name = "likeFlag") String likeFlag){
+    public List<ShalomUniversalDTO> updateLike(@RequestParam(name = "userId") String userId, @RequestParam(name = "shalomId") String shalomId, @RequestParam(name = "likeFlag") String likeFlag){
         shalomService.updateLike(Long.parseLong(userId), Long.parseLong(shalomId), Boolean.parseBoolean(likeFlag));
         return shalomService.findAllLikeComment(Long.parseLong(userId));
     }
@@ -153,14 +153,9 @@ public class ShalomController {
     }
 
     @DeleteMapping("/delete")
-    public List<Shalom> deleteShalom(@RequestParam(name = "id") String id, @RequestParam(name = "userId") String userId){
+    public List<ShalomUniversalDTO> deleteShalom(@RequestParam(name = "id") String id, @RequestParam(name = "userId") String userId){
         shalomService.deleteShalom(Long.parseLong(id));
         return shalomService.findByUserId(Long.parseLong(userId));
-    }
-
-    private ShalomLikeCommentDTO convertToDto(Shalom shalom) {
-        ShalomLikeCommentDTO shalomDto = modelMapper.map(shalom, ShalomLikeCommentDTO.class);
-        return shalomDto;
     }
 
     @GetMapping("/profilePic")

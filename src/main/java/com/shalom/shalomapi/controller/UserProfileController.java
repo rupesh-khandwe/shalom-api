@@ -40,15 +40,27 @@ public class UserProfileController {
     private JwtService jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @PostMapping("/register")
-    public ResponseEntity<?> postUser(@RequestBody UserProfile userProfile) throws Exception {
+
+    @PostMapping("/gregister")
+    public ResponseEntity<?> postGUser(@RequestBody UserProfile userProfile) throws Exception {
         try{
-            userProfileService.saveUserProfile(userProfile);
+            userProfileService.saveGUserProfile(userProfile);
             return new ResponseEntity<>(userProfile, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> postUser(@RequestBody UserProfile userProfile) throws Exception {
+        try{
+            userProfileService.saveUserProfile(userProfile);
+            return new ResponseEntity<>(userProfile, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponseDTO> createAuthenticationToken(@RequestBody AuthRequestDTO authRequestDTO, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
         try {

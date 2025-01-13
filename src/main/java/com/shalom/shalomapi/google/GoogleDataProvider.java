@@ -28,6 +28,7 @@ public class GoogleDataProvider {
         try {
             return verifier.verify(googleToken) != null;
         } catch (GeneralSecurityException | IOException e) {
+			System.out.println("Couldn't verify Google token or expired. Cause: "+e.toString());
         }
 		return false;
     }

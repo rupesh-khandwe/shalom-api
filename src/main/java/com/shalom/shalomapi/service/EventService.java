@@ -43,6 +43,7 @@ public class EventService {
     }
 
     public List<IEvent> findByUserId(Long userId){
+        System.out.println("findAllEvents ***** ");
         return eventRepo.findAllEvents();
     }
 
@@ -78,7 +79,7 @@ public class EventService {
         //LocalDate date = LocalDate.parse(eventDto.getEventDate(), inputFormatter);
         //String outputDate = date.format(DateTimeFormatter.ofPattern(outputFormat));
         LocalDate date = LocalDate.parse(eventDto.getEventDate(), inputFormatter);
-        String formattedDate = outputFormatter.format(date.plusDays(1));
+        String formattedDate = outputFormatter.format(date); //date.plusDays(1)
         System.out.println("API event date "+ formattedDate); // prints 10-04-2018
         event.setEventDate(formattedDate);
         event.setEventTime(eventDto.getEventTime());

@@ -41,6 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
 			isGoogleTokenValid = jwtService.isGoogleTokenValid(token);
+			System.out.println("Is GoogleTokenValid= "+isGoogleTokenValid);
 			username = isGoogleTokenValid ? jwtService.extractGoogleEmailFromToken(token) : jwtService.extractUsername(token);
 		}
 

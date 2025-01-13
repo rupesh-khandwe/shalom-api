@@ -45,7 +45,7 @@ public class ChurchService {
     }
 
     public List<Church> findAll(){
-        return churchRepo.findAll();
+        return churchRepo.findAllByCreatedOn();
     }
 
     public List<IChurch> findChurchBySearchKey(){
@@ -71,7 +71,7 @@ public class ChurchService {
         newChurch.setCountryId(church.getCountryId());
         newChurch.setStateId(church.getStateId());
         newChurch.setCityId(church.getCityId());
-        newChurch.setRegionId(church.getRegionId());
+        newChurch.setRegionId(null);
         newChurch.setCreatedBy(church.getCreatedBy());
         newChurch.setLanguageId(church.getLanguageId());
         newChurch.setCreatedOn((new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
@@ -108,6 +108,7 @@ public class ChurchService {
     }
 
     public List<Language> getAllLanguage(){
+        System.out.println("getAllLanguage ***** ");
         return languageRepo.findAll();
     }
 }

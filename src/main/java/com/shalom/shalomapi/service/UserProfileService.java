@@ -1,6 +1,7 @@
 package com.shalom.shalomapi.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.shalom.shalomapi.exception.UserAlreadyExistsException;
 import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.repository.UserProfileRepository;
 import org.apache.commons.text.WordUtils;
@@ -44,7 +45,7 @@ public class UserProfileService implements UserDetailsService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 */
-    public void saveUserProfile(UserProfile userProfile) {
+    public void saveGUserProfile(UserProfile userProfile) {
         UserProfile userProfile1 = userProfileRepo.findByEmail(userProfile.getEmail());
         if (userProfile1 != null) {
             userProfile.setUserId(userProfile1.getUserId());
@@ -58,6 +59,27 @@ public class UserProfileService implements UserDetailsService {
         userProfile.setCreatedOn((new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         userProfile.setImageUrl(userProfile.getImageUrl());
         userProfileRepo.save(userProfile);
+    }
+
+    public void saveUserProfile(UserProfile userProfile) {
+        if(!userProfile.getUserName().equals("") && !userProfile.getEmail().equals("")){
+            UserProfile userProfile1 = userProfileRepo.findByEmail(userProfile.getEmail());
+            if (userProfile1 != null) {
+               throw new UserAlreadyExistsException("User is already exists.");
+            } else {
+                if (userProfile.getPassword() != null && !userProfile.getPassword().isEmpty()) {
+                    userProfile.setPassword(new BCryptPasswordEncoder().encode(userProfile.getPassword()));
+                }
+                userProfile.setFirstName(WordUtils.capitalizeFully(userProfile.getFirstName()));
+                userProfile.setLastName(WordUtils.capitalizeFully(userProfile.getLastName()));
+                userProfile.setCountryId(Long.parseLong("78"));
+                userProfile.setCreatedOn((new Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                userProfile.setImageUrl(userProfile.getImageUrl());
+                userProfileRepo.save(userProfile);
+            }
+        } else {
+            throw new RuntimeException("Invalid request.");
+        }
     }
 
    /* public UserDetails getUserByNameAndPassword(String userName, String password) throws UsernameNotFoundException {

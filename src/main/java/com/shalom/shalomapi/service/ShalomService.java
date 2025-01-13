@@ -1,16 +1,16 @@
 package com.shalom.shalomapi.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.shalom.shalomapi.dto.ShalomUniversalDTO;
 import com.shalom.shalomapi.model.*;
 import com.shalom.shalomapi.repository.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
-import com.shalom.shalomapi.service.Utils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
@@ -39,6 +39,9 @@ public class ShalomService {
     private DonationRepository donationRepo;
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private Utils utils;
 
     public Shalom findById(Long id){
@@ -48,8 +51,26 @@ public class ShalomService {
         return shalomValue;
     }
 
-    public List<Shalom> findByUserId(Long userId){
-        return shalomRepo.findByUserId(userId);
+    public List<ShalomUniversalDTO> findByUserId(Long userId){
+        List<Shalom> shalomList = new ArrayList<>();
+        List<ShalomUniversalDTO> shalomPojoList = new ArrayList<>();
+        shalomList = shalomRepo.findByUserId(userId);
+        for(Shalom shalom : shalomList){
+            ShalomUniversalDTO shalomPojo = new ShalomUniversalDTO();
+            shalomPojo.setShalomId(shalom.getShalomId());
+            shalomPojo.setUserId(shalom.getUserId());
+            shalomPojo.setUserName(shalom.getUserName());
+            shalomPojo.setShalomFlag(shalom.getShalomFlag());
+            shalomPojo.setShalom(shalom.getShalom());
+            shalomPojo.setCreatedOn(shalom.getCreatedOn());
+            shalomPojo.setUpdatedOn(shalom.getUpdatedOn());
+            shalomPojo.setImageUrl(shalom.getImageUrl());
+            shalomPojo.setVideoUrl(shalom.getVideoUrl());
+            String [] images = null!=shalom.getImageUrl()?shalom.getImageUrl().split("\\|"): new String[1];
+            shalomPojo.setImageList(images);
+            shalomPojoList.add(shalomPojo);
+        }
+        return shalomPojoList;
     }
 
     public List<IShalomComment> findCommentByShalomId(Long shalomId){
@@ -60,8 +81,31 @@ public class ShalomService {
         return shalomCommentRepo.save(shalomComment);
     }
 
-    public List<IShalomLikeComment> findAllLikeComment(Long userId){
-        return shalomRepo.findAllLikeComment(userId);
+    public List<ShalomUniversalDTO> findAllLikeComment(Long userId){
+        List<IShalomLikeComment> shalomList = new ArrayList<>();
+        List<ShalomUniversalDTO> shalomPojoList = new ArrayList<>();
+        shalomList = shalomRepo.findAllLikeComment(userId);
+        for(IShalomLikeComment shalom : shalomList){
+            ShalomUniversalDTO shalomPojo = new ShalomUniversalDTO();
+            shalomPojo.setShalomId(shalom.getShalomId());
+            shalomPojo.setUserId(shalom.getUserId());
+            shalomPojo.setUserName(shalom.getUserName());
+            shalomPojo.setShalom(shalom.getShalom());
+            shalomPojo.setCommentCount(shalom.getCommentCount());
+            shalomPojo.setLikeCount(shalom.getLikeCount());
+            shalomPojo.setLikeFlag(shalom.getLikeFlag());
+            shalomPojo.setShalomId(shalom.getShalomId());
+            shalomPojo.setImageUrl(shalom.getImageUrl());
+            shalomPojo.setVideoUrl(shalom.getVideoUrl());
+            shalomPojo.setShalomFlag(shalom.getShalomFlag());
+            shalomPojo.setUpdatedOn(shalom.getUpdatedOn());
+            shalomPojo.setCreatedOn(shalom.getCreatedOn());
+            shalomPojo.setProfileImageUrl(shalom.getProfileImageUrl());
+            String [] images = null!=shalom.getImageUrl()?shalom.getImageUrl().split("\\|"):new String[1];
+            shalomPojo.setImageList(images);
+            shalomPojoList.add(shalomPojo);
+        }
+        return shalomPojoList;
     }
 
     public Shalom saveShalom(ShalomDTO shalomDto){
@@ -160,5 +204,10 @@ public class ShalomService {
 
     public void saveDonation(Donation donation){
         donationRepo.save(donation);
+    }
+
+    private ShalomUniversalDTO convertToDto(Shalom shalom) {
+        ShalomUniversalDTO shalomDto = modelMapper.map(shalom, ShalomUniversalDTO.class);
+        return shalomDto;
     }
 }

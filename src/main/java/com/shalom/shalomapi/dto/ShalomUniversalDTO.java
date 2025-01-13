@@ -1,12 +1,13 @@
-package com.shalom.shalomapi.model;
+package com.shalom.shalomapi.dto;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Data
-public class ShalomLikeCommentDTO {
+public class ShalomUniversalDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +23,17 @@ public class ShalomLikeCommentDTO {
     private Long likeCount;
     private Long commentCount;
     private String userName;
+    private String profileImageUrl;
+    private String[] imageList;
+    private Boolean likeFlag;
 
-    public ShalomLikeCommentDTO(){
+    public ShalomUniversalDTO(){
 
     }
 
     @Override
     public String toString() {
-        return "Shalom{" +
+        return "ShalomLikeCommentDTO{" +
                 "shalomId=" + shalomId +
                 ", userId=" + userId +
                 ", shalomFlag=" + shalomFlag +
@@ -41,6 +45,9 @@ public class ShalomLikeCommentDTO {
                 ", likeCount=" + likeCount +
                 ", commentCount=" + commentCount +
                 ", userName='" + userName + '\'' +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
+                ", imageList=" + Arrays.toString(imageList) +
+                ", getLikeFlag=" + likeFlag +
                 '}';
     }
 }
